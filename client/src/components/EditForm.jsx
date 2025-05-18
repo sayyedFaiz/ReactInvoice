@@ -2,6 +2,7 @@ import CustomerDetails from "./CustomerDetails";
 import ProductForm from "./ProductForm";
 import ProductTable from "./ProductTable";
 
+
 export default function MainForm({ invoice, setInvoice, showInvoice }) {
   const customers = [
     {
@@ -100,6 +101,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   return (
     <>
       <div>
+
         <form className="space-y-4" onSubmit={addItem}>
           <CustomerDetails customer={invoice.customerDetails} />
           <ProductForm

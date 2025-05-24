@@ -10,6 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@react-pdf/renderer": "^4.3.0"
+    "@react-pdf/renderer": "^4.3.0",
+    "react-pdf-table": "^1.0.0-alfa.3"
+  },
+  "devDependencies": {
+    "@ag-media/react-pdf-table": "^2.0.3"
   }
 }

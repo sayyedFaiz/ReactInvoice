@@ -4,6 +4,7 @@ import { FaCheck } from "react-icons/fa";
 import { useState } from "react";
 
 const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
+  console.log(invoice);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editingItem, setEditingItem] = useState({});
 
@@ -120,10 +121,10 @@ const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
                 <td className="border border-gray-400 p-2">{item.hsn}</td>
                 <td className="border border-gray-400 p-2">{item.quantity}</td>
                 <td className="border border-gray-400 p-2">
-                  {parseFloat(item.price).toFixed(2)}
+                  {parseFloat(item.price || 0).toFixed(2)}
                 </td>
                 <td className="border border-gray-400 p-2">
-                  {parseFloat(item.amount).toFixed(2)}
+                  {parseFloat(item.amount || 0).toFixed(2)}
                 </td>
                 {!onShowInvoice && (
                   <td className="border border-gray-400 p-2 text-center">
@@ -172,16 +173,41 @@ const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
           </td>
         </tr>
         <tr>
-          <td className="border border-gray-400 p-2">CGST</td>
-          <td className="border border-gray-400 p-2">-</td>
+          <td className="border border-gray-400 p-2">
+            CGST{" "}
+            {invoice.customerDetails.taxType === "CGST+SGST"
+              ? `- ${invoice.customerDetails.taxRate}%`
+              : ``}
+          </td>
+          <td className="border border-gray-400 p-2">
+            {invoice.customerDetails.taxType === "CGST+SGST"
+              ? invoice.cgst.toFixed(2)
+              : `-`}
+          </td>
         </tr>
         <tr>
-          <td className="border border-gray-400 p-2">SGST</td>
-          <td className="border border-gray-400 p-2">-</td>
+          <td className="border border-gray-400 p-2">
+            SGST{" "}
+            {invoice.customerDetails.taxType === "CGST+SGST"
+              ? `- ${invoice.customerDetails.taxRate}%`
+              : ``}
+          </td>
+          <td className="border border-gray-400 p-2">
+            {invoice.customerDetails.taxType === "CGST+SGST"
+              ? invoice.sgst.toFixed(2)
+              : `-`}
+          </td>
         </tr>
         <tr>
-          <td className="border border-gray-400 p-2">IGST</td>
-          <td className="border border-gray-400 p-2">-</td>
+          <td className="border border-gray-400 p-2">
+            IGST{" "}
+            {invoice.customerDetails.taxType === "IGST"
+              ? `- ${invoice.customerDetails.taxRate}%`
+              : ``}
+          </td>
+          <td className="border border-gray-400 p-2">
+            {invoice.customerDetails.taxType === "IGST" ? invoice.igst.toFixed(2) : `-`}
+          </td>
         </tr>
         <tr>
           <td className="border border-gray-400 p-2 text-left">Round Off</td>
@@ -196,7 +222,7 @@ const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
             Grand Total
           </td>
           <td className="border border-gray-400 p-2 text-left font-bold">
-            {(invoice.total + invoice.roundOff).toFixed(2)}
+            {invoice.grandTotal.toFixed(2)}
           </td>
         </tr>
       </tfoot>

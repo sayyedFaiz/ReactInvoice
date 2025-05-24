@@ -2,7 +2,6 @@ import CustomerDetails from "./CustomerDetails";
 import ProductForm from "./ProductForm";
 import ProductTable from "./ProductTable";
 
-
 export default function MainForm({ invoice, setInvoice, showInvoice }) {
   const customers = [
     {
@@ -10,11 +9,15 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
       address:
         "484/A, GIDC, Shankar Tekri, Industrial estate, Jaam Nagar, Gujarat-361004",
       gstNumber: "24AANFB7797G1ZY",
+      taxType: "IGST",
+      taxRate: 18, //18% IGST
     },
     {
       name: "Tech Solutions Pvt Ltd",
       address: "12, IT Park, Bangalore, Karnataka-560001",
       gstNumber: "29AAACB1234C1ZP",
+      taxType: "CGST+SGST",
+      taxRate: 9, //9%*2  for CGST+SGST
     },
   ];
 
@@ -34,14 +37,33 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   // Handle customer selection
   const handleCustomerChange = (e) => {
     const selectedCustomer = customers.find((c) => c.name === e.target.value);
-    setInvoice((prev) => ({
-      ...prev,
-      customerName: e.target.value,
-      customerDetails: selectedCustomer,
-    }));
+    setInvoice((prev) => {
+      const newCustomer = {
+        ...prev,
+        customerName: e.target.value,
+        customerDetails: selectedCustomer,
+      };
+      const { cgst, sgst, igst, total, roundedGrandTotal, grandTotal } =
+        calculateTotal(prev.items, newCustomer.customerDetails);
+      return {
+        ...prev,
+        customerName: e.target.value,
+        customerDetails: selectedCustomer,
+        total: total,
+        cgst: cgst,
+        sgst: sgst,
+        igst: igst,
+        roundOff: roundedGrandTotal - grandTotal,
+        grandTotal: roundedGrandTotal,
+      };
+    });
   };
   const addItem = (e) => {
     e.preventDefault();
+    if (!invoice.customerName) {
+      alert("Please select company name");
+      return;
+    }
     setInvoice((prev) => {
       // Ensure the item's total is calculated before adding
       const newItem = {
@@ -51,22 +73,23 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
       // Add the new item to the items array
       const updatedItems = [...prev.items, newItem];
       // Calculate the grand total by summing all items' total price
-      const { total, roundedTotal } = calculateTotal(updatedItems);
+
+      const { cgst, sgst, igst, total, roundedGrandTotal, grandTotal } =
+        calculateTotal(updatedItems, prev.customerDetails);
+      console.log("CustomerDetails", prev.customerName);
+
       return {
         ...prev,
         items: updatedItems, // Add the current item to the items array
-        item: { name: "", quantity: 0, price: 0, hsn: "", amount: 0 }, // Reset the item
-        total, // Store the calculated grand total
-        roundOff: roundedTotal - total, // Store the round-off value
+        item: { name: "", quantity: "", price: "", hsn: "", amount: "" }, // Reset the item
+        total: total,
+        cgst: cgst,
+        sgst: sgst,
+        igst: igst,
+        roundOff: roundedGrandTotal - grandTotal,
+        grandTotal: roundedGrandTotal,
       };
     });
-  };
-  const calculateTotal = (updatedItems) => {
-    const total = updatedItems.reduce((acc, item) => acc + item.amount, 0);
-    // console.log(total);
-    // Round the total to the nearest 0.50
-    const roundedTotal = Math.round(total * 2) / 2;
-    return { total, roundedTotal };
   };
 
   const handleDeleteItem = (indexToRemove) => {
@@ -74,12 +97,17 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
       const updatedItems = prev.items.filter(
         (_, index) => index !== indexToRemove
       );
-      const { total, roundedTotal } = calculateTotal(updatedItems);
+      const { cgst, sgst, igst, total, roundedGrandTotal, grandTotal } =
+        calculateTotal(updatedItems, prev.customerDetails);
       return {
         ...prev,
         items: updatedItems,
-        total,
-        roundOff: roundedTotal - total,
+        total: total,
+        cgst: cgst,
+        sgst: sgst,
+        igst: igst,
+        roundOff: roundedGrandTotal - grandTotal,
+        grandTotal: roundedGrandTotal,
       };
     });
   };
@@ -88,20 +116,44 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
     setInvoice((prev) => {
       const updatedItems = [...prev.items];
       updatedItems[index] = updatedItem;
-      const { total, roundedTotal } = calculateTotal(updatedItems);
+      const { cgst, sgst, igst, total, roundedGrandTotal, grandTotal } =
+        calculateTotal(updatedItems, prev.customerDetails);
       return {
         ...prev,
         items: updatedItems,
-        total,
-        roundOff: roundedTotal - total,
+        total: total,
+        cgst: cgst,
+        sgst: sgst,
+        igst: igst,
+        roundOff: roundedGrandTotal - grandTotal,
+        grandTotal: roundedGrandTotal,
       };
     });
   };
+  const calculateTotal = (updatedItems, customerDetails) => {
+    const total = updatedItems.reduce((acc, item) => acc + item.amount || 0, 0);
+    // console.log(total);
+    // Round the total to the nearest 0.50
+    let igst = 0,
+      sgst = 0,
+      cgst = 0;
+    if (customerDetails) {
+      if (customerDetails.taxType === "IGST") {
+        igst = total * (customerDetails.taxRate / 100);
+      } else if (customerDetails.taxType === "CGST+SGST") {
+        cgst = total * (customerDetails.taxRate / 100);
+        sgst = total * (customerDetails.taxRate / 100);
+      }
+    }
+    const totalTax = igst + cgst + sgst;
+    const grandTotal = total + totalTax;
+    const roundedGrandTotal = Math.round(grandTotal);
 
+    return { cgst, sgst, igst, total, roundedGrandTotal, grandTotal };
+  };
   return (
     <>
       <div>
-
         <form className="space-y-4" onSubmit={addItem}>
           <CustomerDetails customer={invoice.customerDetails} />
           <ProductForm
@@ -110,12 +162,14 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
             onItemChange={handleInvoiceChange}
             onCustomerChange={handleCustomerChange}
           />
-          <ProductTable
-            invoice={invoice}
-            onItemDelete={handleDeleteItem}
-            onItemSave={handleItemEditSave}
-            onShowInvoice={showInvoice}
-          />
+          {invoice.items.length > 0 && (
+            <ProductTable
+              invoice={invoice}
+              onItemDelete={handleDeleteItem}
+              onItemSave={handleItemEditSave}
+              onShowInvoice={showInvoice}
+            />
+          )}
         </form>
       </div>
     </>

@@ -1,12 +1,17 @@
+import MyDocument from "./DownloadPDF/DownloadPDF";
+import { PDFViewer } from "@react-pdf/renderer";
 import CustomerDetails from "./CustomerDetails";
 import ProductTable from "./ProductTable";
-
-
 const FinalInvoice = ({ invoice, showInvoice }) => {
   return (
     <>
+      <div className="print:hidden w-full h-full flex justify-center ">
+        <PDFViewer className="w-1/2 h-full ">
+          <MyDocument invoice={invoice} />
+        </PDFViewer>
+      </div>
 
-      <div className="flex flex-col justify-between h-full ">
+      <div className=" print:block hidden flex flex-col justify-between h-full ">
         <div className="invoiceContainer">
           <div className="headerContainer">
             <h1 className="invoice font-bold text-3xl tracking-wide">
@@ -27,7 +32,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
             </div>
           </div>
           <div className="mt-5">
-            <ProductTable invoice={invoice} onShowInvoice={showInvoice} />
+            <ProductTable invoice={invoice} onShowInvoice={!showInvoice} />
           </div>
         </div>
         <div className="text-3xl flex  mt-5 justify-center align-center">

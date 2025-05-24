@@ -33,7 +33,7 @@ const ProductForm = ({
           onChange={onCustomerChange}
           className="w-fit p-2 border rounded"
         >
-          <option value="">Select Company Name</option>
+          <option value="none">Select Company Name</option>
           {customers.map((customer, index) => (
             <option key={index} value={customer.name}>
               {customer.name}

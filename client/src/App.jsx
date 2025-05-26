@@ -2,7 +2,7 @@ import Invoice from "./pages/Invoice";
 
 function App() {
   return (
-    <div className=" p-4  flex h-screen">
+    <div className=" px-10 py-2  flex h-screen">
       <Invoice />
     </div>
   );

@@ -2,6 +2,7 @@ import MyDocument from "./DownloadPDF/DownloadPDF";
 import { PDFViewer } from "@react-pdf/renderer";
 import CustomerDetails from "./CustomerDetails";
 import ProductTable from "./ProductTable";
+import Footer from "./Footer";
 const FinalInvoice = ({ invoice, showInvoice }) => {
   return (
     <>
@@ -11,32 +12,32 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
         </PDFViewer>
       </div>
 
-      <div className=" print:block hidden flex flex-col justify-between h-full ">
+      <div className="hidden  flex-col  h-full ">
         <div className="invoiceContainer">
           <div className="headerContainer">
-            <h1 className="invoice font-bold text-3xl tracking-wide">
+            <h1 className="invoice font-extrabold text-3xl tracking-wide uppercase">
               Tax Invoice
             </h1>
-            <div className="flex justify-between mt-5">
+            <div className="flex justify-between mt-3">
               <CustomerDetails customer={invoice.customerDetails} />
               <div>
                 <p className="text-md">
-                  <span>Date: </span>
+                  <span  className="font-bold">Date: </span>
                   {new Date(invoice.date).toLocaleDateString("en-GB")}
                 </p>
                 <p className="text-md">
-                  <span>Invoice No.: </span>
+                  <span  className="font-bold">Invoice No.: </span>
                   {invoice.invoiceNumber}
                 </p>
               </div>
             </div>
           </div>
-          <div className="mt-5">
+          <div className="mt-2">
             <ProductTable invoice={invoice} onShowInvoice={!showInvoice} />
           </div>
         </div>
-        <div className="text-3xl flex  mt-5 justify-center align-center">
-          footer
+        <div className="flex flex-1">
+          <Footer />
         </div>
       </div>
     </>

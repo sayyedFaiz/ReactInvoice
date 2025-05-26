@@ -87,7 +87,6 @@ export default function MyDocument({ invoice }) {
                   <Text style={styles.tableHeader}>amount</Text>
                 </View>
               </View>
-
               {/* Rows */}
               {invoice.items.map((item, index) => (
                 <View style={styles.tableRow} key={index}>
@@ -113,7 +112,6 @@ export default function MyDocument({ invoice }) {
                   </View>
                 </View>
               ))}
-
               {/* Simulated rowspan and colspan in last row */}
               <View style={styles.tableRow}>
                 <View
@@ -329,6 +327,91 @@ export default function MyDocument({ invoice }) {
                     {(invoice.total + invoice.roundOff).toFixed(2)}
                   </Text>
                 </View>
+              </View>
+            </View>
+          </View>
+          <View style={styles.footerContainer}>
+            <View
+              style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <View
+                style={{ width: "50%" }}
+                className="termsAndConditionContainer w-1/2 "
+              >
+                <Text style={[styles.text, { fontWeight: "bold" }]}>
+                  Terms and Conditions:
+                </Text>
+                <View style={{ flexDirection: "column", marginTop: 10 }}>
+                  <View style={{ flexDirection: "row", marginBottom: 4 }}>
+                    <Text style={[styles.text, { marginHorizontal: 8 }]}>
+                      1.
+                    </Text>
+                    <Text style={styles.text}>
+                      Goods once sold cannot be returned
+                    </Text>
+                  </View>
+                  <View style={{ flexDirection: "row", marginBottom: 4 }}>
+                    <Text style={[styles.text, { marginHorizontal: 8 }]}>
+                      2.
+                    </Text>
+                    <Text style={styles.text}>
+                      {" "}
+                      We are not responsible for breakage and/or shortage of
+                      goods after delivery
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={styles.signatureContainer}
+                className=" flex flex-col h-full w-1/2   text-center justify-end pt-10"
+              >
+                <Text
+                  style={{ fontSize: 14, fontWeight: "bold" }}
+                  className="text-2xl font-bold"
+                >
+                  Faisal Sayyed
+                </Text>
+                <Text style={{ fontSize: 10 }} className="text-md font-medium">
+                  Proprietor
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                width: "100%",
+                borderRadius: 100,
+                backgroundColor: "#e5e7eb", // Tailwind's bg-gray-200
+              }}
+              className="row footer flex justify-center bg-gray-200 rounded-4xl w-full"
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  paddingHorizontal: 5,
+                  paddingVertical: 10,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                {/* <img src="/images/ion_location-outline.svg" alt="" /> */}
+                <Text
+                  style={styles.text}
+                  className="company-address my-0 mx-2 text-md"
+                >
+                  E-6, Swastik Estate, Behind Milan Palace Goddev Road,
+                  Bhayander (East)-401105
+                </Text>
               </View>
             </View>
           </View>

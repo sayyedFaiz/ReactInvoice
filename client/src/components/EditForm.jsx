@@ -11,6 +11,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
       gstNumber: "24AANFB7797G1ZY",
       taxType: "IGST",
       taxRate: 18, //18% IGST
+      transport: ["Ranjeet Transport (27AATPV4835F1Z2)"],
     },
     {
       name: "Tech Solutions Pvt Ltd",
@@ -18,6 +19,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
       gstNumber: "29AAACB1234C1ZP",
       taxType: "CGST+SGST",
       taxRate: 9, //9%*2  for CGST+SGST
+      transport: [],
     },
   ];
 
@@ -37,6 +39,11 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   // Handle customer selection
   const handleCustomerChange = (e) => {
     const selectedCustomer = customers.find((c) => c.name === e.target.value);
+    console.log(selectedCustomer);
+    if (selectedCustomer === undefined) {
+      return;
+    }
+
     setInvoice((prev) => {
       const newCustomer = {
         ...prev,
@@ -60,15 +67,22 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   };
   const addItem = (e) => {
     e.preventDefault();
+
+    if (invoice.items.length >= 15) {
+      alert("You can only add up to 15 items.");
+      return;
+    }
+
     if (!invoice.customerName) {
       alert("Please select company name");
       return;
     }
     setInvoice((prev) => {
       // Ensure the item's total is calculated before adding
+
       const newItem = {
         ...prev.item,
-        amount: prev.item.quantity * parseFloat(prev.item.price),
+        amount: prev.item.quantity * parseFloat(prev.item.price) || 0, // Calculate amount
       };
       // Add the new item to the items array
       const updatedItems = [...prev.items, newItem];
@@ -76,8 +90,6 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
 
       const { cgst, sgst, igst, total, roundedGrandTotal, grandTotal } =
         calculateTotal(updatedItems, prev.customerDetails);
-      console.log("CustomerDetails", prev.customerName);
-
       return {
         ...prev,
         items: updatedItems, // Add the current item to the items array
@@ -132,7 +144,8 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   };
   const calculateTotal = (updatedItems, customerDetails) => {
     const total = updatedItems.reduce((acc, item) => acc + item.amount || 0, 0);
-    // console.log(total);
+    console.log(updatedItems);
+    console.log(total);
     // Round the total to the nearest 0.50
     let igst = 0,
       sgst = 0,
@@ -153,8 +166,11 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   };
   return (
     <>
-      <div>
+      <div >
         <form className="space-y-4" onSubmit={addItem}>
+          <h1 className="invoice font-extrabold text-3xl tracking-wide uppercase">
+            Tax Invoice
+          </h1>
           <CustomerDetails customer={invoice.customerDetails} />
           <ProductForm
             customers={customers} // Pass the customers list to the form

@@ -3,7 +3,9 @@ const styles = StyleSheet.create({
   page: {
     flexDirection: "row",
     backgroundColor: "#ffffff",
-    padding: 10,
+
+    paddingVertical: 10,
+    paddingHorizontal: 30,
   },
   invoiceContainer: {
     display: "flex",
@@ -20,11 +22,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   companyTitle: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: "bold",
     textTransform: "uppercase",
     textAlign: "center",
-    letterSpacing: 1,
+    letterSpacing: 0.025,
   },
   companyContactDetails: {
     display: "flex",
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignContent: "center",
     width: "100%",
-    fontSize: 12,
+    fontSize: 10,
     marginBottom: 10,
     marginTop: 5,
   },
@@ -94,11 +96,31 @@ const styles = StyleSheet.create({
   tableHeader:{
     padding: 5,
     fontSize: 10,
-    textAlign:"center",
+    // textAlign:"center",
     fontWeight: "bold",
     color:"#fff",
     backgroundColor: "#000",
     textTransform: "capitalize"
+  },
+  footerContainer:{
+    width: "100%",
+    display: "flex",
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  signatureContainer:{
+    display: "flex",
+    width: "50%",
+    height: "100%",
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    textAlign: "center",
+    paddingTop: 20,
+
   },
   text: {
     fontSize: 12,

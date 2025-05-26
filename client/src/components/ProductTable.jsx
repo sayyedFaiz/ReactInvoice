@@ -4,7 +4,6 @@ import { FaCheck } from "react-icons/fa";
 import { useState } from "react";
 
 const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
-  console.log(invoice);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editingItem, setEditingItem] = useState({});
 
@@ -37,19 +36,29 @@ const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
   };
 
   return (
-    <table className="table-auto w-full border-collapse border border-gray-400">
+    <table className="table-auto w-full border-collapse border border-gray-400 text-sm">
       <thead>
         <tr className="bg-black">
-          <th className="border border-gray-400 text-white p-2">Sr. No.</th>
-          <th className="border border-gray-400 text-white p-2">
+          <th className="border border-gray-400 text-white text-left p-2">
+            Sr. No.
+          </th>
+          <th className="border border-gray-400 text-white  text-left p-2">
             Product Name
           </th>
-          <th className="border border-gray-400 text-white p-2">HSN</th>
-          <th className="border border-gray-400 text-white p-2">Quantity</th>
-          <th className="border border-gray-400 text-white p-2">Price</th>
-          <th className="border border-gray-400 text-white p-2">Amount</th>
+          <th className="border border-gray-400 text-white  text-left p-2">
+            HSN
+          </th>
+          <th className="border border-gray-400 text-white  text-left p-2">
+            Quantity
+          </th>
+          <th className="border border-gray-400 text-white  text-left p-2">
+            Price
+          </th>
+          <th className="border border-gray-400 text-white  text-left p-2">
+            Amount
+          </th>
           {!onShowInvoice && (
-            <th className="border border-gray-400 text-white p-2">Actions</th>
+            <th className="border border-gray-400 text-white   p-2">Actions</th>
           )}
         </tr>
       </thead>
@@ -64,7 +73,7 @@ const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
                     name="name"
                     value={editingItem.name}
                     onChange={ediItem}
-                    className="w-full border px-1"
+                    className="w-full px-2 py-1 outline-none  focus:ring-0 focus:outline-none focus:border-transparent border-none "
                   />
                 </td>
                 <td className="border p-2">
@@ -72,7 +81,7 @@ const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
                     name="hsn"
                     value={editingItem.hsn}
                     onChange={ediItem}
-                    className="w-full border px-1"
+                    className="w-full px-2 py-1 outline-none  focus:ring-0 focus:outline-none focus:border-transparent border-none "
                   />
                 </td>
                 <td className="border p-2">
@@ -81,7 +90,7 @@ const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
                     type="number"
                     value={editingItem.quantity}
                     onChange={ediItem}
-                    className="w-full border px-1"
+                    className="w-full px-2 py-1 outline-none  focus:ring-0 focus:outline-none focus:border-transparent border-none "
                   />
                 </td>
                 <td className="border p-2">
@@ -90,7 +99,7 @@ const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
                     type="number"
                     value={editingItem.price}
                     onChange={ediItem}
-                    className="w-full border px-1"
+                    className="w-full px-2 py-1 outline-none  focus:ring-0 focus:outline-none focus:border-transparent border-none "
                   />
                 </td>
                 <td className="border p-2">
@@ -155,7 +164,7 @@ const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
           <td
             colSpan="4"
             rowSpan="7"
-            className="border p-2 border-gray-400 text-left"
+            className="border px-2 border-gray-400 text-left"
           >
             <div className="flex flex-col">
               <span className="font-bold text-xl">Payment Method:</span>
@@ -206,7 +215,9 @@ const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
               : ``}
           </td>
           <td className="border border-gray-400 p-2">
-            {invoice.customerDetails.taxType === "IGST" ? invoice.igst.toFixed(2) : `-`}
+            {invoice.customerDetails.taxType === "IGST"
+              ? invoice.igst.toFixed(2)
+              : `-`}
           </td>
         </tr>
         <tr>

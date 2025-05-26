@@ -33,7 +33,7 @@ const ProductForm = ({
           onChange={onCustomerChange}
           className="w-fit p-2 border rounded"
         >
-          <option value="none">Select Company Name</option>
+          <option value="">Select Company Name</option>
           {customers.map((customer, index) => (
             <option key={index} value={customer.name}>
               {customer.name}
@@ -50,7 +50,6 @@ const ProductForm = ({
           name="name"
           onChange={onItemChange}
           className="flex-1 p-2 border rounded"
-
         />
         <input
           type="number"
@@ -83,10 +82,11 @@ const ProductForm = ({
       </div>
       <button
         type="submit"
-        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+        className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-500"
       >
         Add Item
-      </button>
+      </button>{" "}
+      <span>{invoice.items.length > 0 && 15 - invoice.items.length}</span>
     </div>
   );
 };

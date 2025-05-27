@@ -22,12 +22,8 @@ const Invoice = () => {
     if(invoice.items.length === 0) return
     setShowInvoice(true);
   };
-  const printInvoice = () => {
-    // window.print();
-  };
-  const downloadInvoice = () => {
-    alert("Download feature is not implemented yet.");
-  };
+
+
   return (
     <div className=" w-screen   h-full    flex  flex-col  ">
       <CompanyTitle />
@@ -58,20 +54,7 @@ const Invoice = () => {
       </div>
       {showInvoice ? (
         <>
-          <div className="flex w-full justify-center  ">
-            <button
-              className="print:hidden cursor-pointer border-radius-5 bg-blue-500 rounded text-white font-bold px-4 py-2 my-4 w-fit mx-5 capitalize  hover:bg-blue-600 text-xl"
-              onClick={() => printInvoice()}
-            >
-              print
-            </button>
-            <button
-              className="print:hidden cursor-pointer border-radius-5 bg-blue-500 rounded text-white font-bold px-4 py-2 my-4 w-fit   capitalize  hover:bg-blue-600 text-xl"
-              onClick={() => downloadInvoice()}
-            >
-              download
-            </button>
-          </div>
+
           <FinalInvoice invoice={invoice} />
         </>
       ) : (
@@ -82,15 +65,6 @@ const Invoice = () => {
             showInvoice={showInvoice}
           />
           <Footer />
-          {invoice.items.length > 0 && (
-            <button
-              className="cursor-pointer border-radius-5 my-5 bg-blue-500 rounded text-white font-bold px-4 w-fit mx-auto py-2 capitalize  hover:bg-blue-600 text-xl"
-              onClick={() => handleShowInvoice()}
-            >
-              {" "}
-              preview
-            </button>
-          )}
         </>
       )}
     </div>

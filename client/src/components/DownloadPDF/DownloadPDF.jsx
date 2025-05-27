@@ -360,7 +360,7 @@ export default function MyDocument({ invoice }) {
                       2.
                     </Text>
                     <Text style={styles.text}>
-                      {" "}
+
                       We are not responsible for breakage and/or shortage of
                       goods after delivery
                     </Text>

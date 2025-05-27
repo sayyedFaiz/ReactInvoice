@@ -1,7 +1,7 @@
 import CustomerDetails from "./CustomerDetails";
 import ProductForm from "./ProductForm";
 import ProductTable from "./ProductTable";
-
+import Footer from "../components/Footer";
 export default function MainForm({ invoice, setInvoice, showInvoice }) {
   const customers = [
     {
@@ -73,10 +73,10 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
       return;
     }
 
-    if (!invoice.customerName) {
-      alert("Please select company name");
-      return;
-    }
+    // if (!invoice.customerName) {
+    //   alert("Please select company name");
+    //   return;
+    // }
     setInvoice((prev) => {
       // Ensure the item's total is calculated before adding
 
@@ -166,7 +166,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   };
   return (
     <>
-      <div >
+      <div className="w-full h-full flex flex-col justify-between">
         <form className="space-y-4" onSubmit={addItem}>
           <h1 className="invoice font-extrabold text-3xl tracking-wide uppercase">
             Tax Invoice
@@ -187,6 +187,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
             />
           )}
         </form>
+        <Footer />
       </div>
     </>
   );

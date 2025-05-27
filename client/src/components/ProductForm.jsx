@@ -16,6 +16,7 @@ const ProductForm = ({
           name="invoiceNumber"
           onChange={onItemChange}
           className="w-fit p-2 border rounded"
+          required
         ></input>
 
         <input
@@ -32,6 +33,7 @@ const ProductForm = ({
           value={invoice.customerName}
           onChange={onCustomerChange}
           className="w-fit p-2 border rounded"
+          required
         >
           <option value="">Select Company Name</option>
           {customers.map((customer, index) => (
@@ -50,6 +52,7 @@ const ProductForm = ({
           name="name"
           onChange={onItemChange}
           className="flex-1 p-2 border rounded"
+          required
         />
         <input
           type="number"
@@ -58,7 +61,8 @@ const ProductForm = ({
           name="quantity"
           onChange={onItemChange}
           className="w-24 p-2 border rounded"
-          // min="1"
+          required
+          min="1"
         />
         <input
           type="number"
@@ -76,7 +80,8 @@ const ProductForm = ({
           name="price"
           onChange={onItemChange}
           className="w-32 p-2 border rounded"
-          // min="1"
+          min="1"
+          required
           step=".01"
         />
       </div>

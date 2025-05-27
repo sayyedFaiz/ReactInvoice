@@ -2,7 +2,7 @@ import { useState } from "react";
 import EditForm from "../components/EditForm";
 import FinalInvoice from "../components/FinalInvoice";
 import CompanyTitle from "../components/CompanyTitle";
-import Footer from "../components/Footer";
+
 const Invoice = () => {
   const [showInvoice, setShowInvoice] = useState(false);
 
@@ -19,13 +19,12 @@ const Invoice = () => {
   });
 
   const handleShowInvoice = () => {
-    if(invoice.items.length === 0) return
+    if (invoice.items.length === 0) return;
     setShowInvoice(true);
   };
 
-
   return (
-    <div className=" w-screen   h-full    flex  flex-col  ">
+    <div className=" w-screen px-10 py-2  h-full    flex  flex-col overflow-auto">
       <CompanyTitle />
       {/* Switch Container */}
       <div className="print:hidden relative w-1/3 mx-auto flex flex-row     rounded-xl shadow-md ">
@@ -34,7 +33,6 @@ const Invoice = () => {
           className={` h-full  w-1/2    absolute top-0 left-0  border border-gray-400  rounded-xl transition-all duration-300 ease-in-out
             ${!showInvoice ? "" : "translate-x-full"}`}
         />
-
         <button
           onClick={() => setShowInvoice(false)}
           className={`z-10 mx-auto  py-2  transition-all ${
@@ -54,7 +52,6 @@ const Invoice = () => {
       </div>
       {showInvoice ? (
         <>
-
           <FinalInvoice invoice={invoice} />
         </>
       ) : (
@@ -64,7 +61,6 @@ const Invoice = () => {
             setInvoice={setInvoice}
             showInvoice={showInvoice}
           />
-          <Footer />
         </>
       )}
     </div>

@@ -172,7 +172,7 @@ export default function MyDocument({ invoice }) {
                     ]}
                   >
                     CGST
-                    {invoice.customerDetails.taxType === "CGST+SGST"
+                    {invoice.customerDetails.taxType === "CGST/SGST"
                       ? `- ${invoice.customerDetails.taxRate}%`
                       : ``}
                   </Text>
@@ -190,7 +190,7 @@ export default function MyDocument({ invoice }) {
                     ]}
                   >
                     SGST
-                    {invoice.customerDetails.taxType === "CGST+SGST"
+                    {invoice.customerDetails.taxType === "CGST/SGST"
                       ? `- ${invoice.customerDetails.taxRate}%`
                       : ``}
                   </Text>
@@ -267,7 +267,7 @@ export default function MyDocument({ invoice }) {
                       },
                     ]}
                   >
-                    {invoice.customerDetails.taxType === "CGST+SGST"
+                    {invoice.customerDetails.taxType === "CGST/SGST"
                       ? invoice.cgst.toFixed(2)
                       : `-`}
                   </Text>
@@ -284,7 +284,7 @@ export default function MyDocument({ invoice }) {
                       },
                     ]}
                   >
-                    {invoice.customerDetails.taxType === "CGST+SGST"
+                    {invoice.customerDetails.taxType === "CGST/SGST"
                       ? invoice.sgst.toFixed(2)
                       : `-`}
                   </Text>
@@ -324,7 +324,7 @@ export default function MyDocument({ invoice }) {
                   </Text>
                   <Text style={[styles.tableCell, { fontWeight: "bold" }]}>
                     {" "}
-                    {(invoice.total + invoice.roundOff).toFixed(2)}
+                    {(invoice.grandTotal).toFixed(2)}
                   </Text>
                 </View>
               </View>

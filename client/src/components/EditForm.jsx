@@ -2,27 +2,23 @@ import CustomerDetails from "./CustomerDetails";
 import ProductForm from "./ProductForm";
 import ProductTable from "./ProductTable";
 import Footer from "../components/Footer";
+import { useEffect, useState } from "react";
+import { getAllCustomers } from "../api/customerApi.js";
 export default function MainForm({ invoice, setInvoice, showInvoice }) {
-  const customers = [
-    {
-      name: "Brassotech International",
-      address:
-        "484/A, GIDC, Shankar Tekri, Industrial estate, Jaam Nagar, Gujarat-361004",
-      gstNumber: "24AANFB7797G1ZY",
-      taxType: "IGST",
-      taxRate: 18, //18% IGST
-      transport: ["Ranjeet Transport (27AATPV4835F1Z2)"],
-    },
-    {
-      name: "Tech Solutions Pvt Ltd",
-      address: "12, IT Park, Bangalore, Karnataka-560001",
-      gstNumber: "29AAACB1234C1ZP",
-      taxType: "CGST+SGST",
-      taxRate: 9, //9%*2  for CGST+SGST
-      transport: [],
-    },
-  ];
+  const [customers, setCustomers] = useState([]);
 
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const customerData = await getAllCustomers();
+        console.log(customerData);
+        setCustomers(customerData);
+      } catch (err) {
+        console.error("fialed to load customers", err);
+      }
+    };
+    fetchCustomers();
+  }, []);
   const handleInvoiceChange = (e) => {
     let { name, value, type } = e.target;
     // Convert numeric values properly
@@ -39,7 +35,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   // Handle customer selection
   const handleCustomerChange = (e) => {
     const selectedCustomer = customers.find((c) => c.name === e.target.value);
-    console.log(selectedCustomer);
+    // console.log(selectedCustomer);
     if (selectedCustomer === undefined) {
       return;
     }
@@ -144,8 +140,8 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   };
   const calculateTotal = (updatedItems, customerDetails) => {
     const total = updatedItems.reduce((acc, item) => acc + item.amount || 0, 0);
-    console.log(updatedItems);
-    console.log(total);
+    // console.log(updatedItems);
+    // console.log(total);
     // Round the total to the nearest 0.50
     let igst = 0,
       sgst = 0,
@@ -153,7 +149,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
     if (customerDetails) {
       if (customerDetails.taxType === "IGST") {
         igst = total * (customerDetails.taxRate / 100);
-      } else if (customerDetails.taxType === "CGST+SGST") {
+      } else if (customerDetails.taxType === "CGST/SGST") {
         cgst = total * (customerDetails.taxRate / 100);
         sgst = total * (customerDetails.taxRate / 100);
       }

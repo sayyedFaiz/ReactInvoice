@@ -184,12 +184,12 @@ const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
         <tr>
           <td className="border border-gray-400 p-2">
             CGST{" "}
-            {invoice.customerDetails.taxType === "CGST+SGST"
+            {invoice.customerDetails.taxType === "CGST/SGST"
               ? `- ${invoice.customerDetails.taxRate}%`
               : ``}
           </td>
           <td className="border border-gray-400 p-2">
-            {invoice.customerDetails.taxType === "CGST+SGST"
+            {invoice.customerDetails.taxType === "CGST/SGST"
               ? invoice.cgst.toFixed(2)
               : `-`}
           </td>
@@ -197,12 +197,12 @@ const ProductTable = ({ invoice, onItemDelete, onItemSave, onShowInvoice }) => {
         <tr>
           <td className="border border-gray-400 p-2">
             SGST{" "}
-            {invoice.customerDetails.taxType === "CGST+SGST"
+            {invoice.customerDetails.taxType === "CGST/SGST"
               ? `- ${invoice.customerDetails.taxRate}%`
               : ``}
           </td>
           <td className="border border-gray-400 p-2">
-            {invoice.customerDetails.taxType === "CGST+SGST"
+            {invoice.customerDetails.taxType === "CGST/SGST"
               ? invoice.sgst.toFixed(2)
               : `-`}
           </td>

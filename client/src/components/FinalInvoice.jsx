@@ -3,10 +3,33 @@ import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import CustomerDetails from "./CustomerDetails";
 import ProductTable from "./ProductTable";
 import Footer from "./Footer";
+import { createInvoice, checkForUniqueInvoiceNo } from "../api/invoiceApi";
 const FinalInvoice = ({ invoice, showInvoice }) => {
-  const printInvoice = () => {
+  console.log("final invoice", invoice)
+  const printInvoice = async () => {
     window.print();
+    const invoiceToSave = JSON.parse(JSON.stringify(invoice));
+    await submitInvoiceToDB(invoiceToSave);
   };
+  const submitInvoiceToDB = async (invoiceData) => {
+    try {
+      // Await the API call with the invoice number
+      await checkForUniqueInvoiceNo(invoiceData.invoiceNumber);
+      await createInvoice(invoiceData);
+      alert("Invoice submitted successfully!");
+    } catch (error) {
+      if (
+        error?.response?.data?.message === "Invoice number already exists" ||
+        error.message === "Duplicate invoice number"
+      ) {
+        alert("Invoice number already exists. Please use a different one.");
+      } else {
+        console.error("Failed to submit the invoice:", error);
+        alert("Something went wrong.");
+      }
+    }
+  };
+
   return (
     <>
       <div className="print:hidden flex w-full justify-center  ">

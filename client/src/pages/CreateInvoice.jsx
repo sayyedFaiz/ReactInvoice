@@ -13,8 +13,12 @@ const Invoice = () => {
     customerDetails: null,
     item: { name: "", quantity: "", price: "", hsn: "", amount: "" }, // Only one item at a time
     items: [],
+    igst:0,
+    sgst:0,
+    cgst:0,
     total: 0,
     roundOff: 0,
+    totalGSTValue: 0,
     grandTotal: 0,
   });
 

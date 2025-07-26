@@ -5,7 +5,6 @@ const ProductForm = ({
   onCustomerChange,
 }) => {
   let item = invoice.item;
-
   return (
     <div>
       <div className="invoiceNUmber flex justify-between ">

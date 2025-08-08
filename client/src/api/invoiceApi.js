@@ -18,3 +18,21 @@ export const getAllInvoice = async ()=> {
   const res = await axios.get(API_URL)
   return res.data
 }
+
+export const getInvoiceById = async (id)=>{
+  try{
+    const res = await axios.get(`${API_URL}/getInvoiceById/${id}`)
+    return res.data
+  }catch(err){
+    console.error("failed to get invoice by id",err)
+  }
+}
+
+export const getNextInvoiceNumber = async ()=>{
+  try{
+    const res = await axios.get(`${API_URL}/getNextInvoiceNumber`)
+    return res.data
+  }catch(err){
+    console.error("failed to get next invoice number",err)
+  }
+}

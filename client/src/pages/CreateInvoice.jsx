@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EditForm from "../components/EditForm";
 import FinalInvoice from "../components/FinalInvoice";
 import CompanyTitle from "../components/CompanyTitle";
-
+import { getNextInvoiceNumber } from "../api/invoiceApi.js";
 const Invoice = () => {
   const [showInvoice, setShowInvoice] = useState(false);
-
+   const [invoiceNumber, setInvoiceNumber] = useState(null);
   const [invoice, setInvoice] = useState({
     invoiceNumber: "", // Stores the unique invoice number
     date: new Date().toISOString().split("T")[0],
@@ -26,6 +26,19 @@ const Invoice = () => {
     if (invoice.items.length === 0) return;
     setShowInvoice(true);
   };
+
+  useEffect(() => {
+    const fetchInvoiceNumber = async () => {
+      const nextInvoiceNumber = await getNextInvoiceNumber()
+      setInvoiceNumber(nextInvoiceNumber.nextInvoiceNumber);
+       setInvoice((prev) => ({
+         ...prev,
+         invoiceNumber : invoiceNumber
+       }))
+
+    };
+    fetchInvoiceNumber();
+  },[invoiceNumber]);
 
   return (
     <div className=" w-screen px-10 py-2  h-full    flex  flex-col overflow-auto">

@@ -1,7 +1,9 @@
 import {
   createInvoice,
   getAllInvoice,
-  inputValidation
+  getInvoiceById,
+  inputValidation,
+  getNextInvoiceNumber
 } from "../controllers/invoiceController.js";
 import express from "express";
 
@@ -11,5 +13,6 @@ router.post("/Create-Invoice", createInvoice);
 router.post("/check", inputValidation);
 
 router.get("/", getAllInvoice);
-
+router.get("/getInvoiceById/:id", getInvoiceById)
+router.get("/getNextInvoiceNumber",getNextInvoiceNumber)
 export default router;

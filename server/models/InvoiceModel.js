@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-
-
 const invoiceItemSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -24,20 +22,21 @@ const invoiceItemSchema = new mongoose.Schema({
   },
 });
 
-
-
 const invoiceSchema = new mongoose.Schema(
   {
-    invoiceNumber: { type: String, required: true, unique: true },
+    invoiceNumber: { type: Number, required: true, unique: true },
     date: { type: Date, required: true },
     // customerName: { type: String, required: true },
-      customerDetails: {
+    customerDetails: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "CustomerDetails",
       required: true,
     },
     items: [invoiceItemSchema],
     total: { type: Number, required: true },
+    igst: { type: Number },
+    cgst: { type: Number },
+    sgst: { type: Number },
     roundOff: { type: Number },
     grandTotal: { type: Number, required: true },
   },
@@ -46,4 +45,4 @@ const invoiceSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model('Invoice', invoiceSchema)
+export default mongoose.model("Invoice", invoiceSchema);

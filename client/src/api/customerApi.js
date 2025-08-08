@@ -5,3 +5,9 @@ export const getAllCustomers = async ()=>{
   const res = await axios.get(API_URL)
   return res.data
 }
+
+export const getCustomerById = async (id)=>{
+  // console.log(id)
+  const res = await axios.get(`${API_URL}/getCustomerById/${id}`,)
+  return res.data
+}

@@ -1,31 +1,24 @@
-import {getAllInvoice} from "../api/invoiceApi.js"
-import { useState, useEffect } from "react"
+import { Link } from "react-router-dom";
+import AllInvoiceTable from "../components/AllInvoiceTable";
 
-const AllInvoice = ()=> {
-  const [invoiceList, setInvoiceList] = useState([])
-
-  useEffect( ()=>{
-    const fetchInvoiceList = async () =>{
-      try{
-        const invoiceData  = await getAllInvoice()
-        console.log(invoiceData)
-        setInvoiceList([invoiceData])
-      }catch(err){
-        console.error("failed to get all the invoices",err)
-      }
-    }
-    fetchInvoiceList()
-  },[])
-
+const AllInvoice = () => {
   return (
     <>
-    {console.log(invoiceList)}
-    {invoiceList.map((data)=>
-     <p key={Math.random()}>{data.Result}</p>
-    )}
-
+      <div className="w-full h-full flex flex-col pt-10  px-10 ">
+        <div>
+          <Link
+            to="/Create-Invoice"
+            className="btn font-bold capitalize border rounded-md px-4 py-2 hover:bg-black hover:text-white"
+          >
+            create invoice
+          </Link>
+        </div>
+        <div className="w-full  mt-10">
+          <AllInvoiceTable />
+        </div>
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default AllInvoice
+export default AllInvoice;

@@ -10,3 +10,14 @@ export const getAllCustomer = async (req, res) => {
       .json({ message: "Failed to fetch customers", error: err.message });
   }
 };
+
+export const getCustomerByID = async (req, res) => {
+  try {
+    const id = req.params
+    // console.log(id)
+    const customerDetails = await CustomerDetails.findById(id.id)
+       res.status(200).json(customerDetails);
+  } catch (err) {
+    console.error("Failed to get customer by id : ", { error: err.message });
+  }
+};

@@ -9,6 +9,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
   const printInvoice = async () => {
     window.print();
     const invoiceToSave = JSON.parse(JSON.stringify(invoice));
+    console.log("invoice to save : ", invoiceToSave)
     await submitInvoiceToDB(invoiceToSave);
   };
   const submitInvoiceToDB = async (invoiceData) => {

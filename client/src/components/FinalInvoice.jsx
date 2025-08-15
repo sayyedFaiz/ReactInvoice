@@ -5,11 +5,11 @@ import ProductTable from "./ProductTable";
 import Footer from "./Footer";
 import { createInvoice, checkForUniqueInvoiceNo } from "../api/invoiceApi";
 const FinalInvoice = ({ invoice, showInvoice }) => {
-  console.log("final invoice", invoice)
+  console.log("final invoice", invoice);
   const printInvoice = async () => {
     window.print();
     const invoiceToSave = JSON.parse(JSON.stringify(invoice));
-    console.log("invoice to save : ", invoiceToSave)
+    console.log("invoice to save : ", invoiceToSave);
     await submitInvoiceToDB(invoiceToSave);
   };
   const submitInvoiceToDB = async (invoiceData) => {
@@ -33,9 +33,9 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
 
   return (
     <>
-      <div className="print:hidden flex w-full justify-center  ">
+      <div className="print:hidden flex w-full justify-center gap-4 mb-2">
         <button
-          className="print:hidden cursor-pointer border-radius-5 bg-blue-500 rounded text-white font-bold px-4 py-2 my-4 w-fit mx-5 capitalize  hover:bg-blue-600 text-xl"
+          className="cursor-pointer bg-blue-500 rounded text-white font-bold px-4 py-2 capitalize hover:bg-blue-600 text-base sm:text-xl"
           onClick={() => printInvoice()}
         >
           print
@@ -44,19 +44,22 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
           document={<MyDocument invoice={invoice} />}
           fileName={`${invoice.customerDetails.name}_${invoice.date}.pdf`}
         >
-          <button className="print:hidden cursor-pointer border-radius-5 bg-blue-500 rounded text-white font-bold px-4 py-2 my-4 w-fit   capitalize  hover:bg-blue-600 text-xl">
+          <button className="cursor-pointer bg-blue-500 rounded text-white font-bold px-4 py-2 capitalize hover:bg-blue-600 text-base sm:text-xl">
             download
           </button>
         </PDFDownloadLink>
       </div>
 
-      <div className="print:hidden w-full h-full flex justify-center ">
-        <PDFViewer className="w-1/2 h-full ">
+      <div className="print:hidden w-full flex justify-center">
+        <PDFViewer
+          className="w-full max-w-[900px] h-[70vh] sm:h-[80vh] rounded shadow-md"
+          style={{ minWidth: 320 }}
+        >
           <MyDocument invoice={invoice} />
         </PDFViewer>
       </div>
-      <div className="hidden print:flex  flex-col  h-full ">
-        <div className="invoiceContainer">
+      <div className="hidden print:flex flex-col h-full ">
+        <div className="invoiceContainer flex-1 flex flex-col">
           <div className="headerContainer">
             <h1 className="invoice font-extrabold text-3xl tracking-wide uppercase">
               Tax Invoice
@@ -79,7 +82,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
             <ProductTable invoice={invoice} onShowInvoice={!showInvoice} />
           </div>
         </div>
-        <div className="flex flex-1">
+        <div className="flex ">
           <Footer />
         </div>
       </div>

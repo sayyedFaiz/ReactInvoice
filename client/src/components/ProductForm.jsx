@@ -8,7 +8,7 @@ const ProductForm = ({
 
   return (
     <div>
-      <div className="invoiceNUmber flex justify-between ">
+      <div className="invoiceNUmber flex flex-col justify-between sm:flex-row justify-between gap-2 ">
         <p className="text-md">
           <span className="font-bold">Invoice No. : </span>
           {invoice.invoiceNumber}
@@ -19,14 +19,14 @@ const ProductForm = ({
           id="date"
           value={invoice.date}
           onChange={onItemChange}
-          className="w-fit p-2 border rounded"
+          className="w-full sm:w-fit p-2 border rounded"
         />
       </div>
       <div className="mt-4">
         <select
           value={invoice.customerName}
           onChange={onCustomerChange}
-          className="w-fit p-2 border rounded"
+          className="w-full sm:w-fit p-2 border rounded"
           required
         >
           <option value="">Select Company Name</option>
@@ -38,7 +38,7 @@ const ProductForm = ({
         </select>
       </div>
       <h3 className="text-lg mt-4 font-semibold">Product Details</h3>
-      <div className="w-full flex flex-wrap sm:space-y-0 space-y-2 space-x-2 mb-2">
+      <div className="w-full flex flex-col sm:flex-row flex-wrap gap-2 mb-2">
         <input
           type="text"
           placeholder="Product Name"
@@ -54,7 +54,7 @@ const ProductForm = ({
           value={item.quantity}
           name="quantity"
           onChange={onItemChange}
-          className="w-24 p-2 border rounded"
+          className="w-full sm:w-24 p-2 border rounded"
           required
           min="1"
         />
@@ -64,7 +64,7 @@ const ProductForm = ({
           value={item.hsn}
           name="hsn"
           onChange={onItemChange}
-          className="w-24 p-2 border rounded"
+          className="w-full sm:w-24 p-2 border rounded"
           // min="1"
         />
         <input
@@ -73,7 +73,7 @@ const ProductForm = ({
           value={item.price}
           name="price"
           onChange={onItemChange}
-          className="w-32 p-2 border rounded"
+          className="w-full sm:w-32 p-2 border rounded"
           min="1"
           required
           step=".01"
@@ -81,7 +81,7 @@ const ProductForm = ({
       </div>
       <button
         type="submit"
-        className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-500"
+        className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-500 w-full sm:w-auto"
       >
         Add Item
       </button>{" "}

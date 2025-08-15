@@ -6,7 +6,7 @@ import CustomerForm from "./components/CustomerForm";
 import AllCustomers from "./pages/AllCustomers"
 function App() {
   return (
-    <div className="flex h-screen overflow-auto">
+    <div className="flex h-screen overflow-auto ">
       <Router>
         <Routes>
           <Route path="/" element={<AllInvoice />} />

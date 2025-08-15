@@ -162,9 +162,9 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   };
   return (
     <>
-      <div className="w-full h-full flex flex-col justify-between">
+      <div className="w-full h-fit flex flex-col  justify-between   ">
         <form className="space-y-4" onSubmit={addItem}>
-          <h1 className="invoice font-extrabold text-3xl tracking-wide uppercase">
+          <h1 className="invoice font-extrabold text-2xl sm:text-3xl tracking-wide uppercase text-center sm:text-left">
             Tax Invoice
           </h1>
           <CustomerDetails customer={invoice.customerDetails} />

@@ -41,10 +41,10 @@ const Invoice = () => {
   },[invoiceNumber]);
 
   return (
-    <div className=" w-screen px-10 py-2  h-full    flex  flex-col overflow-auto">
+    <div className="w-full px-4 py-2 h-full flex flex-col overflow-auto sm:px-10 ">
       <CompanyTitle />
       {/* Switch Container */}
-      <div className="print:hidden relative w-1/3 mx-auto flex flex-row     rounded-xl shadow-md ">
+      <div className="print:hidden relative w-full max-w-md mx-auto flex flex-row rounded-xl shadow-md mt-4 mb-4">
         {/* Sliding background */}
         <div
           className={` h-full  w-1/2    absolute top-0 left-0  border border-gray-400  rounded-xl transition-all duration-300 ease-in-out
@@ -52,7 +52,7 @@ const Invoice = () => {
         />
         <button
           onClick={() => setShowInvoice(false)}
-          className={`z-10 mx-auto  py-2  transition-all cursor-pointer ${
+          className={`z-10 w-1/2 py-2 transition-all cursor-pointer ${
             !showInvoice ? "font-semibold text-black" : "text-gray-500"
           }`}
         >
@@ -60,7 +60,7 @@ const Invoice = () => {
         </button>
         <button
           onClick={() => handleShowInvoice()}
-          className={`z-10 mx-auto ${invoice.items.length === 0 ? `cursor-not-allowed`:`cursor-pointer`}  transition-all ${
+          className={`z-10 w-1/2 ${invoice.items.length === 0 ? `cursor-not-allowed`:`cursor-pointer`}  transition-all ${
             showInvoice ? "font-semibold text-black": "text-gray-500 "
           }`}
         >

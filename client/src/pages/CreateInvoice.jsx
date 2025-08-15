@@ -52,7 +52,7 @@ const Invoice = () => {
         />
         <button
           onClick={() => setShowInvoice(false)}
-          className={`z-10 mx-auto  py-2  transition-all ${
+          className={`z-10 mx-auto  py-2  transition-all cursor-pointer ${
             !showInvoice ? "font-semibold text-black" : "text-gray-500"
           }`}
         >
@@ -60,8 +60,8 @@ const Invoice = () => {
         </button>
         <button
           onClick={() => handleShowInvoice()}
-          className={`z-10 mx-auto   transition-all ${
-            showInvoice ? "font-semibold text-black" : "text-gray-500"
+          className={`z-10 mx-auto ${invoice.items.length === 0 ? `cursor-not-allowed`:`cursor-pointer`}  transition-all ${
+            showInvoice ? "font-semibold text-black": "text-gray-500 "
           }`}
         >
           Preview Invoice

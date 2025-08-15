@@ -53,10 +53,9 @@ export const getInvoiceById = async (req, res) => {
   }
 };
 
-
 export const getNextInvoiceNumber = async (req, res) => {
   try {
-    const lastInvoice = await Invoice.findOne().sort({ invoiceNumber: - 1 });
+    const lastInvoice = await Invoice.findOne().sort({ invoiceNumber: -1 });
     const nextInvoiceNumber = lastInvoice ? lastInvoice.invoiceNumber + 1 : 1;
     res.json({ nextInvoiceNumber });
   } catch (err) {

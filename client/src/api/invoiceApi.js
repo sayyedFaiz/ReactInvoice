@@ -1,8 +1,8 @@
 import axios from "axios";
-const API_URL = "http://localhost:5000/api/invoices";
+const API_URL = import.meta.env.VITE_INVOICE_URL;
 
 export const createInvoice = async (invoiceData) => {
-  const res = await axios.post(`${API_URL}/Create-Invoice`, { invoiceData });
+  const res = await axios.post(`${API_URL}/create-invoice`, { invoiceData });
   return res.data;
 };
 

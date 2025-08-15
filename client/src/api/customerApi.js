@@ -1,13 +1,23 @@
 import axios from "axios";
-const API_URL = "http://localhost:5000/api/customers";
+const API_URL = import.meta.env.VITE_CUSTOMER_URL;
 
-export const getAllCustomers = async ()=>{
-  const res = await axios.get(API_URL)
-  return res.data
-}
+export const getAllCustomers = async () => {
+  const res = await axios.get(API_URL);
+  return res.data;
+};
 
-export const getCustomerById = async (id)=>{
+export const getCustomerById = async (id) => {
   // console.log(id)
-  const res = await axios.get(`${API_URL}/getCustomerById/${id}`,)
-  return res.data
-}
+  const res = await axios.get(`${API_URL}/getCustomerById/${id}`);
+  return res.data;
+};
+
+export const addCustomer = async (formData) => {
+  try {
+    const res = await axios.post(`${API_URL}/add-customer`, formData);
+    console.log(res.data)
+    return res.data;
+  } catch (err) {
+    console.error("failed to create a customer", err);
+  }
+};

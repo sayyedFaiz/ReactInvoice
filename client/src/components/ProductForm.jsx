@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-
-
 const ProductForm = ({
   customers,
   invoice,
@@ -12,20 +9,10 @@ const ProductForm = ({
   return (
     <div>
       <div className="invoiceNUmber flex justify-between ">
-        {/* <input
-          type="number"
-          placeholder="Invoice No."
-          value={invoice.invoiceNumber}
-          name="invoiceNumber"
-          onChange={onItemChange}
-          className="w-fit p-2 border rounded"
-          required
-        ></input> */}
         <p className="text-md">
           <span className="font-bold">Invoice No. : </span>
           {invoice.invoiceNumber}
         </p>
-
         <input
           type="date"
           name="date"

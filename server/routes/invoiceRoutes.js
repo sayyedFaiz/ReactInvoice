@@ -9,7 +9,7 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/Create-Invoice", createInvoice);
+router.post("/create-invoice", createInvoice);
 router.post("/check", inputValidation);
 
 router.get("/", getAllInvoice);

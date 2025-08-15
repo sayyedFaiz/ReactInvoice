@@ -7,10 +7,9 @@ function AllInvoiceTable() {
     const fetchInvoiceList = async () => {
       try {
         const invoiceData = await getAllInvoice();
-        console.log(invoiceData)
+        console.log(invoiceData);
         // setInvoiceList(invoiceData);
-       setInvoiceList(await CustomerMap(invoiceData));
-
+        setInvoiceList(await CustomerMap(invoiceData));
       } catch (err) {
         console.error(
           "failed to get all the invoices : ",
@@ -23,7 +22,7 @@ function AllInvoiceTable() {
 
   const hanleViewInvoice = (id) => {
     const url = `/${id}`;
-    console.log(url)
+    console.log(url);
     window.open(url, "_blank");
   };
 
@@ -55,16 +54,16 @@ function AllInvoiceTable() {
         {invoiceList.length ? (
           invoiceList.map((data, index) => (
             <tr key={data._id}>
-              <td className="text-center text-md p-1">{index + 1}</td>
-              <td className="text-center text-md p-1">{data.invoiceNumber}</td>
-              <td className="text-center text-md p-1">
+              <td className="text-center text-md p-1 ">{index + 1}</td>
+              <td className="text-center text-md p-1 ">{data.invoiceNumber}</td>
+              <td className="text-center text-md p-1 ">
                 {data.customerDetails?.name}
               </td>
-              <td className="text-center text-md p-1">
+              <td className="text-center text-md p-1 ">
                 {data.items.reduce((sum, item) => sum + item.quantity, 0)}
               </td>
-              <td className="text-center text-md p-1">{data.grandTotal}</td>
-              <td className="text-center text-md p-1">
+              <td className="text-center text-md p-1 ">{data.grandTotal}</td>
+              <td className="text-center text-md p-2 ">
                 <button
                   onClick={() => {
                     hanleViewInvoice(data._id);

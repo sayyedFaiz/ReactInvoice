@@ -13,11 +13,21 @@ export const getAllCustomer = async (req, res) => {
 
 export const getCustomerByID = async (req, res) => {
   try {
-    const id = req.params
+    const id = req.params;
     // console.log(id)
-    const customerDetails = await CustomerDetails.findById(id.id)
-       res.status(200).json(customerDetails);
+    const customerDetails = await CustomerDetails.findById(id.id);
+    res.status(200).json(customerDetails);
   } catch (err) {
     console.error("Failed to get customer by id : ", { error: err.message });
+  }
+};
+
+export const addCustomer = async (req, res) => {
+  try {
+    const customerData = new CustomerDetails(req.body);
+    const customer = await customerData.save();
+    res.status(201).json(customer);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 };

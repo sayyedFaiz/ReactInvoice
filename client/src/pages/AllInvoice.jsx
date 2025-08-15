@@ -18,6 +18,7 @@ const AllInvoice = () => {
           </Link>
         </div>
         <div className="w-full  mt-6 sm:mt-10 overflow-x-auto">
+
           <AllInvoiceTable />
         </div>
       </div>

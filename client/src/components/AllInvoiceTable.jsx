@@ -3,6 +3,7 @@ import { getAllInvoice } from "../api/invoiceApi.js";
 import { CustomerMap } from "../utils/CustomerMapping.js";
 function AllInvoiceTable() {
   const [invoiceList, setInvoiceList] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchInvoiceList = async () => {
       try {
@@ -15,6 +16,8 @@ function AllInvoiceTable() {
           "failed to get all the invoices : ",
           err.response.data.message
         );
+      } finally {
+        setLoading(false);
       }
     };
     fetchInvoiceList();
@@ -26,7 +29,9 @@ function AllInvoiceTable() {
     window.open(url, "_blank");
   };
 
-  return (
+  return loading ? (
+    <div className="text-center text-lg font-medium">Loading...</div>
+  ) : (
     <table className="table-auto w-full border-collapse border border-gray-400 text-sm">
       <thead>
         <tr className="bg-black">

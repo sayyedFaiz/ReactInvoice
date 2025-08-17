@@ -82,6 +82,8 @@ function AllInvoiceTable() {
               <td className="text-center text-md p-2 ">
                 <Link
                   to={`/${data._id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="border rounded-md px-4 py-1 cursor-pointer inline-block"
                 >
                   view

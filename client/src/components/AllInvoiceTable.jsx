@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllInvoice } from "../api/invoiceApi.js";
 import { CustomerMap } from "../utils/CustomerMapping.js";
+import { Link } from "react-router-dom";
 function AllInvoiceTable() {
   const [invoiceList, setInvoiceList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,21 +24,21 @@ function AllInvoiceTable() {
     fetchInvoiceList();
   }, []);
 
-  const hanleViewInvoice = (id) => {
-    const url = `/${id}`;
-    // console.log(url);
-    // window.open(url, "_blank");
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
-    // 📱 Mobile → download (forces PDF app)
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `invoice-${id}.pdf`;
-    link.click();
-  } else {
-    // 💻 Desktop → open inline in new tab
-    window.open(url, "_blank");
-  }
-  };
+  // const hanleViewInvoice = (id) => {
+  //   const url = `/${id}`;
+  //   // console.log(url);
+  //   // window.open(url, "_blank");
+  //   if (/Mobi|Android/i.test(navigator.userAgent)) {
+  //     // 📱 Mobile → download (forces PDF app)
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.download = `invoice.pdf`;
+  //     link.click();
+  //   } else {
+  //     // 💻 Desktop → open inline in new tab
+  //     window.open(url, "_blank");
+  //   }
+  // };
 
   return loading ? (
     <div className="text-center text-lg font-medium">Loading...</div>
@@ -79,14 +80,12 @@ function AllInvoiceTable() {
               </td>
               <td className="text-center text-md p-1 ">{data.grandTotal}</td>
               <td className="text-center text-md p-2 ">
-                <button
-                  onClick={() => {
-                    hanleViewInvoice(data._id);
-                  }}
-                  className="border rounded-md px-4 py-1 cursor-pointer"
+                <Link
+                  to={`/${data._id}`}
+                  className="border rounded-md px-4 py-1 cursor-pointer inline-block"
                 >
                   view
-                </button>
+                </Link>
               </td>
             </tr>
           ))

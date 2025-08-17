@@ -9,8 +9,7 @@ function AllInvoiceTable() {
     const fetchInvoiceList = async () => {
       try {
         const invoiceData = await getAllInvoice();
-        console.log(invoiceData);
-        // setInvoiceList(invoiceData);
+        // console.log(invoiceData);
         setInvoiceList(await CustomerMap(invoiceData));
       } catch (err) {
         console.error(
@@ -23,23 +22,6 @@ function AllInvoiceTable() {
     };
     fetchInvoiceList();
   }, []);
-
-  // const hanleViewInvoice = (id) => {
-  //   const url = `/${id}`;
-  //   // console.log(url);
-  //   // window.open(url, "_blank");
-  //   if (/Mobi|Android/i.test(navigator.userAgent)) {
-  //     // 📱 Mobile → download (forces PDF app)
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.download = `invoice.pdf`;
-  //     link.click();
-  //   } else {
-  //     // 💻 Desktop → open inline in new tab
-  //     window.open(url, "_blank");
-  //   }
-  // };
-
   return loading ? (
     <div className="text-center text-lg font-medium">Loading...</div>
   ) : (

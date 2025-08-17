@@ -11,7 +11,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
     const fetchCustomers = async () => {
       try {
         const customerData = await getAllCustomers();
-        console.log(customerData);
+        // console.log(customerData);
         setCustomers(customerData);
       } catch (err) {
         console.error("fialed to load customers", err);

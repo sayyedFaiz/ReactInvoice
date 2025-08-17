@@ -1,7 +1,7 @@
 import { getCustomerById } from "../api/customerApi.js";
 
 export async function CustomerMap(invoiceData) {
-  console.log(invoiceData)
+  // console.log(invoiceData)
   const customerPromises = invoiceData.map((invoice) => {
     return getCustomerById(invoice.customerDetails);
   });

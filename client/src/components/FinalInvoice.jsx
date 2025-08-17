@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import MyDocument from "./DownloadPDF/DownloadPDF";
 import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import CustomerDetails from "./CustomerDetails";
@@ -5,13 +6,28 @@ import ProductTable from "./ProductTable";
 import Footer from "./Footer";
 import { createInvoice, checkForUniqueInvoiceNo } from "../api/invoiceApi";
 const FinalInvoice = ({ invoice, showInvoice }) => {
-  console.log("final invoice", invoice);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
+  }, []);
+
+  // console.log("final invoice", invoice);
   const printInvoice = async () => {
     window.print();
     const invoiceToSave = JSON.parse(JSON.stringify(invoice));
-    console.log("invoice to save : ", invoiceToSave);
+    // console.log("invoice to save : ", invoiceToSave);
     await submitInvoiceToDB(invoiceToSave);
   };
+
+  const downloadAndSubmit = async () => {
+    const invoiceToSave = JSON.parse(JSON.stringify(invoice));
+    // console.log("invoice to save : ", invoiceToSave);
+    await submitInvoiceToDB(invoiceToSave);
+  };
+
+  // Function to submit the invoice to the database
+  // It checks for unique invoice number before submitting
   const submitInvoiceToDB = async (invoiceData) => {
     try {
       // Await the API call with the invoice number
@@ -25,8 +41,8 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
       ) {
         alert("Invoice number already exists. Please use a different one.");
       } else {
-        console.error("Failed to submit the invoice:", error);
-        alert("Something went wrong.");
+        // console.error("Failed to submit the invoice:", error);
+        // alert("Something went wrong.");
       }
     }
   };
@@ -34,25 +50,34 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
   return (
     <>
       <div className="print:hidden flex w-full justify-center gap-4 mb-2">
-        <button
-          className="cursor-pointer bg-blue-500 rounded text-white font-bold px-4 py-2 capitalize hover:bg-blue-600 text-base sm:text-xl"
-          onClick={() => printInvoice()}
-        >
-          print
-        </button>
+        {!isTouchDevice && (
+          <button
+            className="cursor-pointer bg-blue-500 rounded text-white font-bold px-4 py-2 capitalize hover:bg-blue-600 text-base sm:text-xl"
+            onClick={() => printInvoice()}
+          >
+            print
+          </button>
+        )}
         <PDFDownloadLink
           document={<MyDocument invoice={invoice} />}
           fileName={`${invoice.customerDetails.name}_${invoice.date}.pdf`}
         >
-          <button className="cursor-pointer bg-blue-500 rounded text-white font-bold px-4 py-2 capitalize hover:bg-blue-600 text-base sm:text-xl">
+          <button
+            className="cursor-pointer bg-blue-500 rounded text-white font-bold px-4 py-2 capitalize hover:bg-blue-600 text-base sm:text-xl"
+            onClick={
+              isTouchDevice
+                ? downloadAndSubmit // 📱 mobile → download + submit
+                : "" // 💻 desktop → just download
+            }
+          >
             download
           </button>
         </PDFDownloadLink>
       </div>
 
-      <div className="print:hidden w-full flex justify-center">
+      <div className="print:hidden w-full h-full flex justify-center ">
         <PDFViewer
-          className="w-full max-w-[900px] h-[70vh] sm:h-[80vh] rounded shadow-md"
+          className="w-1/2  h-full rounded shadow-md"
           style={{ minWidth: 320 }}
         >
           <MyDocument invoice={invoice} />

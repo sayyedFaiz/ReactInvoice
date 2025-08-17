@@ -11,10 +11,11 @@ function InvoiceViewer() {
     const fetchInvoiceAndCustomer = async () => {
       try {
         const invoiceData = await getInvoiceById(id);
-        console.log(invoiceData);
+        // console.log(invoiceData);
         setInvoice(await CustomerMap([invoiceData]));
       } catch (err) {
         console.error("Error loading invoice:", err);
+        throw err;
       }
     };
     fetchInvoiceAndCustomer();
@@ -27,7 +28,7 @@ function InvoiceViewer() {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `invoice_${invoice[0].invoiceNumber}.pdf`;
+        link.download = `${invoice[0].invoiceNumber}.pdf`;
         link.click();
         URL.revokeObjectURL(url); // clean up
       })();

@@ -15,7 +15,7 @@ export const getCustomerById = async (id) => {
 export const addCustomer = async (formData) => {
   try {
     const res = await axios.post(`${API_URL}/add-customer`, formData);
-    console.log(res.data)
+    // console.log(res.data)
     return res.data;
   } catch (err) {
     console.error("failed to create a customer", err);

@@ -1,6 +1,6 @@
 function AllCustomerTable({ customers }) {
   return (
-    <div className="flex flex-col items-center w-full mt-6 sm:mt-10">
+    <div className="flex flex-col items-center w-full mt-6 ">
       <div className="w-full overflow-x-auto">
         <table className="min-w-[600px] table-auto w-full border-collapse border border-gray-400 text-sm">
           <thead>

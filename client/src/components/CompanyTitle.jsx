@@ -11,7 +11,6 @@ function CompanyTitle() {
           <p className="gst ">GST:27AHSPB7715N1ZR</p>
         </div>
       </div>
-
     </>
   );
 }

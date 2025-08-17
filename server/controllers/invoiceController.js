@@ -46,6 +46,11 @@ export const getInvoiceById = async (req, res) => {
     const id = req.params;
     // console.log(id)
     const invoice = await Invoice.findById(id.id);
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="invoice.pdf"`
+    );
     res.status(200).json(invoice);
   } catch (err) {
     res.status(400).json({ message: err.message });

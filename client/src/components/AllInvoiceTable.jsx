@@ -25,8 +25,18 @@ function AllInvoiceTable() {
 
   const hanleViewInvoice = (id) => {
     const url = `/${id}`;
-    console.log(url);
+    // console.log(url);
+    // window.open(url, "_blank");
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+    // 📱 Mobile → download (forces PDF app)
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `invoice-${id}.pdf`;
+    link.click();
+  } else {
+    // 💻 Desktop → open inline in new tab
     window.open(url, "_blank");
+  }
   };
 
   return loading ? (

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
+import { PDFViewer, pdf } from "@react-pdf/renderer";
 import MyDocument from "../components/DownloadPDF/DownloadPDF";
 import { getInvoiceById } from "../api/invoiceApi";
 import { CustomerMap } from "../utils/CustomerMapping.js";
@@ -19,6 +19,20 @@ function InvoiceViewer() {
     };
     fetchInvoiceAndCustomer();
   }, [id]);
+  useEffect(() => {
+    // Auto-download PDF on mobile once invoice is loaded
+    if (invoice && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+      (async () => {
+        const blob = await pdf(<MyDocument invoice={invoice[0]} />).toBlob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `invoice_${invoice[0].invoiceNumber}.pdf`;
+        link.click();
+        URL.revokeObjectURL(url); // clean up
+      })();
+    }
+  }, [invoice]);
 
   return (
     <>
@@ -26,13 +40,6 @@ function InvoiceViewer() {
         <>
           <p>Loading...</p>
         </>
-      ) : /Mobi|Android/i.test(navigator.userAgent) ? (
-        // If on mobile, download the PDF directly
-        // 📱 Mobile → download (forces PDF app)
-        <PDFDownloadLink
-          document={<MyDocument invoice={invoice[0]} />}
-          fileName={`invoice_${invoice[0].invoiceNumber}.pdf`}
-        ></PDFDownloadLink>
       ) : (
         <>
           <div className="w-full h-full">

@@ -1,6 +1,39 @@
 @import "tailwindcss";
 
+* {
+  box-sizing: border-box;
+}
 
-*{
-    box-sizing: border-box;
+@media screen {
+  .print-container {
+    display: none;
+  }
+} /* Print mode */
+@media print {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    font-size: 12pt;
+    -webkit-print-color-adjust: exact; /* for iOS Safari */
+    print-color-adjust: exact;
+  }
+
+  .print-container {
+    display: flex !important;
+    width: 100%;
+    height: 100%;
+
+  }
+
+  .invoiceContainer {
+    height: 100%;
+  }
+
+  /* Avoid flex issues in print */
+  .headerContainer,
+  .footerContainer {
+    display: block !important;
+    width: 100% !important;
+  }
 }

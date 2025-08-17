@@ -58,8 +58,8 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
           <MyDocument invoice={invoice} />
         </PDFViewer>
       </div>
-      <div className="hidden print:flex flex-col h-full ">
-        <div className="invoiceContainer flex-1 flex flex-col">
+      <div className="print-container flex-col h-auto">
+        <div className="invoiceContainer flex flex-col w-full h-full mx-auto">
           <div className="headerContainer">
             <h1 className="invoice font-extrabold text-3xl tracking-wide uppercase">
               Tax Invoice
@@ -82,7 +82,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
             <ProductTable invoice={invoice} onShowInvoice={!showInvoice} />
           </div>
         </div>
-        <div className="flex ">
+        <div className="footerContainer mt-4">
           <Footer />
         </div>
       </div>

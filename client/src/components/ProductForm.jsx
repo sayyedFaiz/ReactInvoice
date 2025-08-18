@@ -8,7 +8,7 @@ const ProductForm = ({
 
   return (
     <div>
-      <div className="invoiceNUmber flex flex-col justify-between sm:flex-row justify-between gap-2 ">
+      <div className="invoiceNUmber flex flex-col justify-between sm:flex-row justify-between gap-2 overflow-x-hidden ">
         <p className="text-md">
           <span className="font-bold">Invoice No. : </span>
           {invoice.invoiceNumber}

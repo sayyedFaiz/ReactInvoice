@@ -66,7 +66,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
             className="cursor-pointer bg-blue-500 rounded text-white font-bold px-4 py-2 capitalize hover:bg-blue-600 text-base sm:text-xl"
             onClick={
               isTouchDevice
-                ? downloadAndSubmit // 📱 mobile → download + submit
+                ? downloadAndSubmit() // 📱 mobile → download + submit
                 : "" // 💻 desktop → just download
             }
           >

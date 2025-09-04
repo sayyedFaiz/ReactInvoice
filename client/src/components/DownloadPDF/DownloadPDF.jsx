@@ -3,7 +3,7 @@ import { Document, Text, Page, View } from "@react-pdf/renderer";
 import styles from "./Styles.js";
 
 export default function MyDocument({ invoice }) {
-  console.log(invoice)
+  // console.log(invoice);
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -44,10 +44,16 @@ export default function MyDocument({ invoice }) {
                       {invoice.customerDetails.address}
                     </Text>
                   </Text>
-                  <Text>
+                  <Text style={{ marginVertical: 2, lineHeight: 0.8 }}>
                     <Text style={styles.label}>GST Number : </Text>
                     <Text style={styles.text}>
                       {invoice.customerDetails.gstNumber}
+                    </Text>
+                  </Text>
+                  <Text>
+                    <Text style={styles.label}>Transport : </Text>
+                    <Text style={styles.text}>
+                      {invoice.customerDetails.transport[0]}
                     </Text>
                   </Text>
                 </View>
@@ -325,7 +331,7 @@ export default function MyDocument({ invoice }) {
                   </Text>
                   <Text style={[styles.tableCell, { fontWeight: "bold" }]}>
                     {" "}
-                    {(invoice.grandTotal).toFixed(2)}
+                    {invoice.grandTotal.toFixed(2)}
                   </Text>
                 </View>
               </View>
@@ -361,7 +367,6 @@ export default function MyDocument({ invoice }) {
                       2.
                     </Text>
                     <Text style={styles.text}>
-
                       We are not responsible for breakage and/or shortage of
                       goods after delivery
                     </Text>

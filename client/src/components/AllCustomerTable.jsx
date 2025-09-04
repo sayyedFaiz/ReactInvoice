@@ -1,4 +1,23 @@
+import { updateTransport } from "../api/customerApi";
 function AllCustomerTable({ customers }) {
+const handleTransportChange = async (e,  customerId, transports) => {
+  console.log(e.target.value);
+   const selectedTransport = e.target.value;
+     // Move selected transport to first position
+    const updatedTransports = [
+      selectedTransport,
+      ...transports.filter((t) => t !== selectedTransport),
+    ];
+
+    try {
+       const res =  await updateTransport(customerId, updatedTransports);
+       console.log("Transport updated:", res);
+    }
+    catch (err) {
+      console.error("Failed to update transport", err);
+    }
+}
+
   return (
     <div className="flex flex-col items-center w-full mt-6 ">
       <div className="w-full overflow-x-auto">
@@ -40,12 +59,14 @@ function AllCustomerTable({ customers }) {
                   <td className="text-center text-md p-3 ">{data.taxRate}%</td>
                   <td className="text-center text-md p-3 ">
                     {data.transport.length ? (
-                      <select
+                      <select onChange={(e) =>
+                          handleTransportChange(e, data._id, data.transport)
+                        }
                         name="transport"
-                        className="w-full sm:w-auto  px-2 py-1"
+                        className="w-full sm:w-auto  px-2 py-1 text-center"
                       >
                         {data.transport.map((transport, idx) => (
-                          <option key={idx} value={transport}>
+                          <option key={idx} value={transport} >
                             {transport}
                           </option>
                         ))}

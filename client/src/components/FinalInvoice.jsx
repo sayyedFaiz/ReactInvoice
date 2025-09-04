@@ -67,7 +67,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
             onClick={
               isTouchDevice
                 ? () => downloadAndSubmit() // 📱 mobile → download + submit
-                : "" // 💻 desktop → just download
+                : null // 💻 desktop → just download
             }
           >
             download

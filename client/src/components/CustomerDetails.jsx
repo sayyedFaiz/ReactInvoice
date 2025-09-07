@@ -12,7 +12,7 @@ const CustomerDetails = ({ customer }) => {
         <span className="font-bold ">GST Number:</span> {customer.gstNumber}
       </p>
       <p className=" text-md">
-        <span className="font-bold ">Transport:</span> {customer.transport.length ? customer.transport[0] : "N/A"}
+        <span className="font-bold ">Transport:</span> {customer.transport.length ? customer.transport : "N/A"}
       </p>
     </div>
   );

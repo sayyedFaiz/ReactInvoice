@@ -42,7 +42,7 @@ function AllCustomerTable({ customers }) {
                     {data.transport.length ? (
                       <select
                         name="transport"
-                        className="w-full sm:w-auto  px-2 py-1"
+                        className="w-full sm:w-auto  px-2 py-1 text-center"
                       >
                         {data.transport.map((transport, idx) => (
                           <option key={idx} value={transport}>

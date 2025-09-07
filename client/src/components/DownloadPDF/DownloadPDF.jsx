@@ -4,6 +4,7 @@ import styles from "./Styles.js";
 
 export default function MyDocument({ invoice }) {
   console.log(invoice)
+  console.log(invoice)
   return (
     <Document>
       <Page size="A4" style={styles.page}>

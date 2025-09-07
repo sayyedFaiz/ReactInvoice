@@ -1,6 +1,6 @@
 const CustomerDetails = ({ customer }) => {
   if (!customer) return null;
-  // console.log(customer)
+  console.log(customer)
   return (
     <div className="sm:w-1/2 w-full ">
       <h1 className="text-lg">To</h1>
@@ -12,7 +12,7 @@ const CustomerDetails = ({ customer }) => {
         <span className="font-bold ">GST Number:</span> {customer.gstNumber}
       </p>
       <p className=" text-md">
-        <span className="font-bold ">Transport:</span> {customer.transport.length ? customer.transport : "N/A"}
+        <span className="font-bold ">Transport:</span> {customer.transport.length ? customer.transport[0] : "N/A"}
       </p>
     </div>
   );

@@ -53,7 +53,9 @@ export default function MyDocument({ invoice }) {
                   <Text>
                     <Text style={styles.label}>Transport : </Text>
                     <Text style={styles.text}>
-                      {invoice.customerDetails.transport[0]}
+                      {invoice.customerDetails.transport[0]
+                        ? invoice.customerDetails.transport[0]
+                        : "N/A"}
                     </Text>
                   </Text>
                 </View>

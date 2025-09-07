@@ -39,7 +39,6 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
     if (selectedCustomer === undefined) {
       return;
     }
-
     setInvoice((prev) => {
       const newCustomer = {
         ...prev,
@@ -68,14 +67,8 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
       alert("You can only add up to 15 items.");
       return;
     }
-
-    // if (!invoice.customerName) {
-    //   alert("Please select company name");
-    //   return;
-    // }
     setInvoice((prev) => {
       // Ensure the item's total is calculated before adding
-
       const newItem = {
         ...prev.item,
         amount: prev.item.quantity * parseFloat(prev.item.price) || 0, // Calculate amount

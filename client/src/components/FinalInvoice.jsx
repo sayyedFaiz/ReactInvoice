@@ -13,24 +13,10 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
   }, []);
 
-  // console.log("final invoice", invoice);
-  // const printInvoice = async () => {
-  //   window.print();
-  //   const invoiceToSave = JSON.parse(JSON.stringify(invoice));
-  //   // console.log("invoice to save : ", invoiceToSave);
-  //   await submitInvoiceToDB(invoiceToSave);
-  // };
-
-  // const downloadAndSubmit = async () => {
-  //   const invoiceToSave = JSON.parse(JSON.stringify(invoice));
-  //   // console.log("invoice to save : ", invoiceToSave);
-  //   await submitInvoiceToDB(invoiceToSave);
-  // };
-
   // Function to submit the invoice to the database
   // It checks for unique invoice number before submitting
   const submitInvoiceToDB = async (invoiceData) => {
-    if (isSubmitted) return; // Prevent duplicate submissions
+    if (isSubmitted || isSubmitting) return; // Prevent duplicate submissions
 
     setIsSubmitting(true);
     try {
@@ -38,7 +24,6 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
       await createInvoice(invoiceData);
       setIsSubmitted(true);
       // Show success message using toast or custom notification
-      // alert("Invoice saved successfully!");
     } catch (error) {
       if (
         error?.response?.data?.message === "Invoice number already exists" ||
@@ -46,7 +31,9 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
       ) {
         alert("Invoice number already exists. Please use a different one.");
       } else {
-        alert("Failed to save invoice. Please try again.");
+        alert(
+          `Error saving invoice: ${error.message || "Unknown error occurred"}`
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -72,7 +59,6 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
           <button
             className={`cursor-pointer rounded text-white font-bold px-4 py-2 capitalize text-base sm:text-xl bg-blue-500 hover:bg-blue-600`}
             onClick={() => handleAction("print")}
-
           >
             Print
           </button>
@@ -83,13 +69,11 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
         >
           {({ loading }) => (
             <button
-              className={`cursor-pointer rounded text-white font-bold px-4 py-2 capitalize text-base sm:text-xl
-                ${
-                  loading || isSubmitting
-                    ? "bg-gray-400"
-                    : "bg-blue-500 hover:bg-blue-600"
-                }`}
-              onClick={() => handleAction("download")}
+              onClick={async () => {
+                if (isSubmitting) return;
+                await submitInvoiceToDB(invoice);
+                // download will happen automatically
+              }}
               disabled={loading || isSubmitting}
             >
               {loading

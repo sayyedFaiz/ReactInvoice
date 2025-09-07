@@ -31,3 +31,22 @@ export const addCustomer = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+export const updateTransport = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const  transport  = req.body;
+    const customer = await CustomerDetails.findByIdAndUpdate(
+      id,
+      { transport },
+      { new: true }
+    );
+    res
+      .status(200)
+      .json({ message: "Transport updated successfully", customer });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Failed to update transport", error: err.message });
+  }
+};

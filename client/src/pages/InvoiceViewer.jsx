@@ -20,7 +20,7 @@ function InvoiceViewer() {
     };
     fetchInvoiceAndCustomer();
   }, [id]);
-  useEffect(() => {
+useEffect(() => {
     // Auto-download PDF on mobile once invoice is loaded
     if (invoice && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
       (async () => {
@@ -29,7 +29,22 @@ function InvoiceViewer() {
         const link = document.createElement("a");
         link.href = url;
         link.download = `${invoice[0].invoiceNumber}.pdf`;
-        link.click();
+        // Use modern download API if available
+        if (navigator.share) {
+          try {
+            const file = new File([blob], `${invoice[0].invoiceNumber}.pdf`, {
+              type: 'application/pdf'
+            });
+            await navigator.share({
+              files: [file]
+            });
+          } catch (err) {
+            console.log('Fallback to regular download',err);
+            link.click();
+          }
+        } else {
+          link.click();
+        }
         URL.revokeObjectURL(url); // clean up
       })();
     }

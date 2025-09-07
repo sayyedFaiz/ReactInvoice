@@ -21,3 +21,12 @@ export const addCustomer = async (formData) => {
     console.error("failed to create a customer", err);
   }
 };
+
+export const updateTransport = async (id, formData) => {
+  try {
+    const res = await axios.put(`${API_URL}/update-transport/${id}`, formData);
+    return res.data;
+  } catch (err) {
+    console.error("failed to update the customer", err);
+  }
+};

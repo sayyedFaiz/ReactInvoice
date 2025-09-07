@@ -7,33 +7,38 @@ import Footer from "./Footer";
 import { createInvoice, checkForUniqueInvoiceNo } from "../api/invoiceApi";
 const FinalInvoice = ({ invoice, showInvoice }) => {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
-
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
   }, []);
 
   // console.log("final invoice", invoice);
-  const printInvoice = async () => {
-    window.print();
-    const invoiceToSave = JSON.parse(JSON.stringify(invoice));
-    // console.log("invoice to save : ", invoiceToSave);
-    await submitInvoiceToDB(invoiceToSave);
-  };
+  // const printInvoice = async () => {
+  //   window.print();
+  //   const invoiceToSave = JSON.parse(JSON.stringify(invoice));
+  //   // console.log("invoice to save : ", invoiceToSave);
+  //   await submitInvoiceToDB(invoiceToSave);
+  // };
 
-  const downloadAndSubmit = async () => {
-    const invoiceToSave = JSON.parse(JSON.stringify(invoice));
-    // console.log("invoice to save : ", invoiceToSave);
-    await submitInvoiceToDB(invoiceToSave);
-  };
+  // const downloadAndSubmit = async () => {
+  //   const invoiceToSave = JSON.parse(JSON.stringify(invoice));
+  //   // console.log("invoice to save : ", invoiceToSave);
+  //   await submitInvoiceToDB(invoiceToSave);
+  // };
 
   // Function to submit the invoice to the database
   // It checks for unique invoice number before submitting
   const submitInvoiceToDB = async (invoiceData) => {
+    if (isSubmitted) return; // Prevent duplicate submissions
+
+    setIsSubmitting(true);
     try {
-      // Await the API call with the invoice number
       await checkForUniqueInvoiceNo(invoiceData.invoiceNumber);
       await createInvoice(invoiceData);
-      alert("Invoice submitted successfully!");
+      setIsSubmitted(true);
+      // Show success message using toast or custom notification
+      // alert("Invoice saved successfully!");
     } catch (error) {
       if (
         error?.response?.data?.message === "Invoice number already exists" ||
@@ -41,37 +46,59 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
       ) {
         alert("Invoice number already exists. Please use a different one.");
       } else {
-        // console.error("Failed to submit the invoice:", error);
-        // alert("Something went wrong.");
+        alert("Failed to save invoice. Please try again.");
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
+  const handleAction = async (action) => {
+    const invoiceToSave = JSON.parse(JSON.stringify(invoice));
 
+    // First submit to database
+    await submitInvoiceToDB(invoiceToSave);
+
+    // If submission was successful, proceed with the action
+
+    if (action === "print") {
+      window.print();
+    }
+    // Download happens automatically through PDFDownloadLink
+  };
   return (
     <>
       <div className="print:hidden flex w-full justify-center gap-4 mb-2">
         {!isTouchDevice && (
           <button
-            className="cursor-pointer bg-blue-500 rounded text-white font-bold px-4 py-2 capitalize hover:bg-blue-600 text-base sm:text-xl"
-            onClick={() => printInvoice()}
+            className={`cursor-pointer rounded text-white font-bold px-4 py-2 capitalize text-base sm:text-xl bg-blue-500 hover:bg-blue-600`}
+            onClick={() => handleAction("print")}
+
           >
-            print
+            Print
           </button>
         )}
         <PDFDownloadLink
           document={<MyDocument invoice={invoice} />}
           fileName={`${invoice.customerDetails.name}_${invoice.date}.pdf`}
         >
-          <button
-            className="cursor-pointer bg-blue-500 rounded text-white font-bold px-4 py-2 capitalize hover:bg-blue-600 text-base sm:text-xl"
-            onClick={
-              isTouchDevice
-                ? () => downloadAndSubmit() // 📱 mobile → download + submit
-                : "" // 💻 desktop → just download
-            }
-          >
-            download
-          </button>
+          {({ loading }) => (
+            <button
+              className={`cursor-pointer rounded text-white font-bold px-4 py-2 capitalize text-base sm:text-xl
+                ${
+                  loading || isSubmitting
+                    ? "bg-gray-400"
+                    : "bg-blue-500 hover:bg-blue-600"
+                }`}
+              onClick={() => handleAction("download")}
+              disabled={loading || isSubmitting}
+            >
+              {loading
+                ? "Generating PDF..."
+                : isSubmitting
+                ? "Saving..."
+                : "Download"}
+            </button>
+          )}
         </PDFDownloadLink>
       </div>
 

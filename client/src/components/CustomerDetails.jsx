@@ -1,6 +1,6 @@
 const CustomerDetails = ({ customer }) => {
   if (!customer) return null;
-  console.log(customer)
+  // console.log(customer)
   return (
     <div className="sm:w-1/2 w-full ">
       <h1 className="text-lg">To</h1>

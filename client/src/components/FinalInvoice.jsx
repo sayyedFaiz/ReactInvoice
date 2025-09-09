@@ -17,12 +17,10 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
   // It checks for unique invoice number before submitting
   const submitInvoiceToDB = async () => {
     if (isSubmitted || isSubmitting) return; // Prevent duplicate submissions
-   const invoiceData = JSON.parse(JSON.stringify(invoice));
+    const invoiceData = JSON.parse(JSON.stringify(invoice));
     setIsSubmitting(true);
     try {
       await checkForUniqueInvoiceNo(invoiceData.invoiceNumber);
-      alert("Invoice number is unique. Proceeding to save.");
-      alert(invoiceData);
       await createInvoice(invoiceData);
       setIsSubmitted(true);
       alert("Invoice saved successfully!");
@@ -33,10 +31,16 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
         error.message === "Duplicate invoice number"
       ) {
         alert("Invoice number already exists. Please use a different one.");
-      } else {
+      } else if (error?.request) {
+        // Request made but no response received → likely network issue
+        console.error("Network error:", error.request);
         alert(
-          `Error saving invoice: ${error.message || "Unknown error occurred"}`
+          "Network error: Could not reach backend. Check your connection or URL."
         );
+      } else {
+        // Something else went wrong in JS
+        console.error("Unexpected error:", error.message);
+        alert(`Unexpected error: ${error.message}`);
       }
     } finally {
       setIsSubmitting(false);

@@ -26,12 +26,13 @@ export const inputValidation = async (req, res) => {
       invoiceNumber: req.body.invoiceNumber,
     });
     if (existingInvoiceNumber) {
-      console.log(res.data)
+      console.log("Invoice number already exists");
       return res
         .status(409)
         .json({ message: "Invoice number already exists", exists: true });
 
     } else {
+       console.log("Invoice number is unique");
       return res.status(200).json({ exists: false });
     }
   } catch (error) {

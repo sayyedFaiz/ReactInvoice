@@ -30,16 +30,6 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
         error.message === "Duplicate invoice number"
       ) {
         alert("Invoice number already exists. Please use a different one.");
-      } else if (error?.request) {
-        // Request made but no response received → likely network issue
-        console.error("Network error:",);
-        alert(
-          "Network error: Could not reach backend. Check your connection or URL.", error.request
-        );
-      } else {
-        // Something else went wrong in JS
-        console.error("Unexpected error:", error.message);
-        alert(`Unexpected error: ${error.message}`);
       }
     } finally {
       setIsSubmitting(false);

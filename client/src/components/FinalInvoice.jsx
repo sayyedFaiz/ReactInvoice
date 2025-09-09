@@ -4,7 +4,7 @@ import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import CustomerDetails from "./CustomerDetails";
 import ProductTable from "./ProductTable";
 import Footer from "./Footer";
-import {checkForUniqueInvoiceNo } from "../api/invoiceApi";
+import { checkForUniqueInvoiceNo } from "../api/invoiceApi";
 const FinalInvoice = ({ invoice, showInvoice }) => {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -19,10 +19,11 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
     if (isSubmitted || isSubmitting) return; // Prevent duplicate submissions
     const invoiceData = JSON.parse(JSON.stringify(invoice));
     setIsSubmitting(true);
+    window.confirm("Submitting invoice to database...");
     try {
       await checkForUniqueInvoiceNo(invoiceData.invoiceNumber);
-      setIsSubmitted(true);
       alert("Invoice saved successfully!");
+      setIsSubmitted(true);
       // Show success message using toast or custom notification
     } catch (error) {
       if (
@@ -66,9 +67,9 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
           {({ loading }) => (
             <button
               className={`cursor-pointer rounded text-white font-bold px-4 py-2 capitalize text-base sm:text-xl bg-blue-500 hover:bg-blue-600`}
-              onClick={async () => {
+              onClick={() => {
                 if (isSubmitting) return;
-                await submitInvoiceToDB();
+                submitInvoiceToDB();
                 // download will happen automatically
               }}
               disabled={loading || isSubmitting}

@@ -18,6 +18,8 @@ export const createInvoice = async (req, res) => {
 };
 
 export const inputValidation = async (req, res) => {
+  console.log("Request body:", req.body); // <--- check what mobile is sending
+
   try {
     const existingInvoiceNumber = await Invoice.findOne({
       invoiceNumber: req.body.invoiceNumber,

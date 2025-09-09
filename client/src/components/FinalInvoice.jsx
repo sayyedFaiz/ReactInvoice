@@ -4,7 +4,7 @@ import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import CustomerDetails from "./CustomerDetails";
 import ProductTable from "./ProductTable";
 import Footer from "./Footer";
-import { createInvoice, checkForUniqueInvoiceNo } from "../api/invoiceApi";
+import {checkForUniqueInvoiceNo } from "../api/invoiceApi";
 const FinalInvoice = ({ invoice, showInvoice }) => {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -21,7 +21,6 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
     setIsSubmitting(true);
     try {
       await checkForUniqueInvoiceNo(invoiceData.invoiceNumber);
-      await createInvoice(invoiceData);
       setIsSubmitted(true);
       alert("Invoice saved successfully!");
       // Show success message using toast or custom notification
@@ -37,11 +36,6 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
         alert(
           "Network error: Could not reach backend. Check your connection or URL."
         );
-        fetch("https://reactinvoice.onrender.com/log-error", {
-          method: "POST",
-          body: JSON.stringify({ error: error.request }),
-          headers: { "Content-Type": "application/json" },
-        });
       } else {
         // Something else went wrong in JS
         console.error("Unexpected error:", error.message);

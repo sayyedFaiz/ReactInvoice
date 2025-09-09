@@ -1,6 +1,7 @@
 import Invoice from "../models/InvoiceModel.js";
 
 export const createInvoice = async (req, res) => {
+  console.log("Request body:", req.body); // <--- check what mobile is sending
   try {
     const lastInvoice = await Invoice.findOne().sort({ invoiceNumber: -1 });
     const newInvoiceNumber = lastInvoice ? lastInvoice.invoiceNumber + 1 : 1;

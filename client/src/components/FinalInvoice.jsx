@@ -37,6 +37,11 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
         alert(
           "Network error: Could not reach backend. Check your connection or URL."
         );
+        fetch("https://reactinvoice.onrender.com/log-error", {
+          method: "POST",
+          body: JSON.stringify({ error: error.request }),
+          headers: { "Content-Type": "application/json" },
+        });
       } else {
         // Something else went wrong in JS
         console.error("Unexpected error:", error.message);

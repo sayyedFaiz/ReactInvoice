@@ -15,15 +15,15 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
 
   // Function to submit the invoice to the database
   // It checks for unique invoice number before submitting
-  const submitInvoiceToDB = async (invoiceData) => {
+  const submitInvoiceToDB = async () => {
     if (isSubmitted || isSubmitting) return; // Prevent duplicate submissions
-
+   const invoiceData = JSON.parse(JSON.stringify(invoice));
     setIsSubmitting(true);
     try {
       await checkForUniqueInvoiceNo(invoiceData.invoiceNumber);
+      alert("Invoice number is unique. Proceeding to save.");
+      alert(invoiceData);
       await createInvoice(invoiceData);
-      console.log("Invoice API URL:", import.meta.env.VITE_INVOICE_URL);
-
       setIsSubmitted(true);
       alert("Invoice saved successfully!");
       // Show success message using toast or custom notification
@@ -75,7 +75,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
               className={`cursor-pointer rounded text-white font-bold px-4 py-2 capitalize text-base sm:text-xl bg-blue-500 hover:bg-blue-600`}
               onClick={async () => {
                 if (isSubmitting) return;
-                await submitInvoiceToDB(invoice);
+                await submitInvoiceToDB();
                 // download will happen automatically
               }}
               disabled={loading || isSubmitting}

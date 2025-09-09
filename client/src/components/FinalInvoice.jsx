@@ -23,6 +23,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
       await checkForUniqueInvoiceNo(invoiceData.invoiceNumber);
       await createInvoice(invoiceData);
       setIsSubmitted(true);
+      alert("Invoice saved successfully!");
       // Show success message using toast or custom notification
     } catch (error) {
       if (
@@ -69,6 +70,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
         >
           {({ loading }) => (
             <button
+              className={`cursor-pointer rounded text-white font-bold px-4 py-2 capitalize text-base sm:text-xl bg-blue-500 hover:bg-blue-600`}
               onClick={async () => {
                 if (isSubmitting) return;
                 await submitInvoiceToDB(invoice);

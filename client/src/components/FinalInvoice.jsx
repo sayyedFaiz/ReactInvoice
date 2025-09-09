@@ -26,13 +26,9 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
       setIsSubmitted(true);
       // Show success message using toast or custom notification
     } catch (error) {
-      if (
-        error?.response?.data?.message === "Invoice number already exists" ||
-        error.message === "Duplicate invoice number"
-      ) {
-        alert("Invoice number already exists. Please use a different one.");
+        alert(`Invoice number already exists. Please use a different one. Error: ${error.message}`);
       }
-    } finally {
+     finally {
       setIsSubmitting(false);
     }
   };

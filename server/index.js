@@ -7,9 +7,14 @@ import customerRoutes from "./routes/customerRoutes.js"
 dotenv.config();
 const app = express();
 app.use(express.json())
-app.use(cors({
-    origin: '*'
-}));
+// Example for Express.js
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+;
 connectDB()
 
 const PORT = process.env.PORT || 5000;

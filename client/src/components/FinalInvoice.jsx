@@ -22,6 +22,8 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
     try {
       await checkForUniqueInvoiceNo(invoiceData.invoiceNumber);
       await createInvoice(invoiceData);
+      console.log("Invoice API URL:", import.meta.env.VITE_INVOICE_URL);
+
       setIsSubmitted(true);
       alert("Invoice saved successfully!");
       // Show success message using toast or custom notification

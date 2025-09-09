@@ -11,6 +11,7 @@ export const createInvoice = async (req, res) => {
     const savedInvoice = await invoice.save();
     res.status(201).json(savedInvoice);
   } catch (error) {
+    console.error("Error creating invoice:", error);
     res.status(400).json({ message: error.message });
   }
 };

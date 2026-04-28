@@ -112,14 +112,14 @@ export const extractInvoiceDetails = async (req, res) => {
     const prompt = `
       Extract the following details from this invoice image and return them in a strict JSON format.
       Do not include markdown formatting (like \`\`\`json).
-      
+
       Fields to extract:
       - invoiceNumber (string)
       - date (YYYY-MM-DD format)
       - customerName (string)
       - customerDetails (object with name, address, gst, etc.)
       - items (array of objects with name, quantity, price, hsn, amount)
-      
+
       If a field is not found, use null or empty string.
       Ensure numeric values are numbers, not strings.
     `;

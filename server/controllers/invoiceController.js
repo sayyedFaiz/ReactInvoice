@@ -1,10 +1,12 @@
 import Invoice from "../models/InvoiceModel.js";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
+import Tesseract from "tesseract.js";
 
 dotenv.config();
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// Ollama local LLM - no API limits, runs entirely on your machine
+const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || "http://localhost:11434";
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "llama3.2:3b";
 
 
 export const createInvoice = async (req, res) => {
@@ -88,66 +90,165 @@ export const deleteInvoice = async (req, res) => {
 export const extractInvoiceDetails = async (req, res) => {
   try {
     console.log("Extracting invoice details...");
-    if (!process.env.GEMINI_API_KEY) {
-      console.error("GEMINI_API_KEY is missing in environment variables");
-      return res.status(500).json({ message: "Server configuration error: Missing API Key" });
-    }
 
     if (!req.file) {
       return res.status(400).json({ message: "No image file uploaded" });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-    const imagePart = {
-      inlineData: {
-        data: req.file.buffer.toString("base64"),
-        mimeType: req.file.mimetype,
-      },
-    };
-
     console.log(`File received: ${req.file.originalname}, Size: ${req.file.size}, Mime: ${req.file.mimetype}`);
-    console.log("Sending request to Gemini...");
 
-    const prompt = `
-      Extract the following details from this invoice image and return them in a strict JSON format.
-      Do not include markdown formatting (like \`\`\`json).
+    // Step 1: Extract text from image using OCR (Tesseract.js)
+    console.log("Step 1: Extracting text from image using OCR (Tesseract.js)...");
 
-      Fields to extract:
-      - invoiceNumber (string)
-      - date (YYYY-MM-DD format)
-      - customerName (string)
-      - customerDetails (object with name, address, gst, etc.)
-      - items (array of objects with name, quantity, price, hsn, amount)
-
-      If a field is not found, use null or empty string.
-      Ensure numeric values are numbers, not strings.
-    `;
-
-    const result = await model.generateContent([prompt, imagePart]);
-    const response = await result.response;
-    console.log("Gemini response received.");
-
-    const text = response.text();
-    console.log("Raw Gemini text:", text);
-
-    // Clean up the response if it contains markdown code blocks
-    const cleanText = text.replace(/```json/g, "").replace(/```/g, "").trim();
-
+    let extractedText;
     try {
-      const data = JSON.parse(cleanText);
-      res.json(data);
-    } catch (parseError) {
-      console.error("Failed to parse Gemini response:", text);
-      res.status(500).json({ message: "Failed to parse extracted data", raw: text });
+      const { data: { text } } = await Tesseract.recognize(
+        req.file.buffer,
+        'eng', // English language
+        {
+          logger: (info) => {
+            if (info.status === 'recognizing text') {
+              console.log(`OCR Progress: ${Math.round(info.progress * 100)}%`);
+            }
+          }
+        }
+      );
+
+      extractedText = text;
+      console.log("OCR extraction completed. Text length:", extractedText.length);
+      console.log("Extracted text preview:", extractedText.substring(0, 200) + "...");
+
+      if (!extractedText || extractedText.trim().length === 0) {
+        return res.status(400).json({
+          message: "Could not extract text from image",
+          error: "OCR returned empty text. Please ensure the image is clear and contains readable text."
+        });
+      }
+    } catch (ocrError) {
+      console.error("OCR Error:", ocrError);
+      return res.status(500).json({
+        message: "Failed to extract text from image",
+        error: ocrError.message,
+        suggestion: "Please ensure the image is clear and contains readable text."
+      });
     }
+
+    // Step 2: Send extracted text to Ollama for structured data extraction
+    console.log(`Step 2: Sending extracted text to Ollama (${OLLAMA_MODEL}) for structured extraction...`);
+
+    const prompt = `Extract the following details from this invoice text and return them in a strict JSON format. Do not include markdown formatting (like \`\`\`json).
+
+Invoice Text:
+${extractedText}
+
+Fields to extract:
+- invoiceNumber (string)
+- date (YYYY-MM-DD format)
+- customerName (string)
+- customerDetails (object with name, address, gst, etc.)
+- items (array of objects with name, quantity, price, hsn, amount)
+
+If a field is not found, use null or empty string.
+Ensure numeric values are numbers, not strings.
+Return ONLY valid JSON, no additional text.`;
+
+    // Ollama models - try primary then fallback
+    const models = [
+      OLLAMA_MODEL,       // Primary model from env (default: llama3.2:3b)
+      "mistral:7b",       // Fallback: stronger reasoning
+    ];
+
+    let lastError = null;
+
+    // Try each model until one works
+    for (const model of models) {
+      try {
+        console.log(`Trying Ollama model: ${model}...`);
+
+        const response = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: model,
+            messages: [
+              {
+                role: "user",
+                content: prompt,
+              },
+            ],
+            stream: false,
+            options: {
+              temperature: 0.1, // Lower temperature for more consistent JSON output
+              num_predict: 2000,
+            },
+            format: "json", // Force JSON response
+          }),
+        });
+
+        if (!response.ok) {
+          const errText = await response.text();
+          // If model not found, try next one
+          if (response.status === 404 || errText.includes("not found")) {
+            console.log(`Model ${model} not found. Trying next model...`);
+            lastError = new Error(`Model ${model} not found: ${errText}`);
+            continue;
+          }
+          throw new Error(`Ollama HTTP ${response.status}: ${errText}`);
+        }
+
+        const result = await response.json();
+        console.log(`Ollama response received using ${model}.`);
+        const text = result.message?.content;
+        console.log("Raw Ollama text:", text);
+
+        // Clean up the response if it contains markdown code blocks
+        const cleanText = text.replace(/```json/g, "").replace(/```/g, "").trim();
+
+        try {
+          const data = JSON.parse(cleanText);
+          console.log("Successfully extracted invoice data!");
+          return res.json(data);
+        } catch (parseError) {
+          console.error(`Failed to parse ${model} response:`, text);
+          // Try next model
+          lastError = parseError;
+          continue;
+        }
+      } catch (apiError) {
+        // If connection refused, Ollama is not running
+        if (apiError.cause?.code === "ECONNREFUSED" || apiError.message?.includes("ECONNREFUSED")) {
+          return res.status(503).json({
+            message: "Ollama is not running",
+            error: "Cannot connect to Ollama at " + OLLAMA_BASE_URL,
+            suggestion: "Start Ollama with 'ollama serve' or download from https://ollama.ai"
+          });
+        }
+
+        lastError = apiError;
+        console.log(`Model ${model} failed: ${apiError.message}. Trying next model...`);
+        continue;
+      }
+    }
+
+    // If all models failed
+    throw new Error(`All Ollama models failed. Last error: ${lastError?.message || "Unknown error"}. Make sure you have pulled the model with: ollama pull ${OLLAMA_MODEL}`);
 
   } catch (error) {
     console.error("Error extracting invoice details:", error);
+
+    // Handle Ollama connection errors
+    if (error.cause?.code === "ECONNREFUSED" || error.message?.includes("ECONNREFUSED")) {
+      return res.status(503).json({
+        message: "Ollama is not running",
+        error: "Cannot connect to Ollama at " + OLLAMA_BASE_URL,
+        suggestion: "Start Ollama with 'ollama serve' or download from https://ollama.ai"
+      });
+    }
+
     res.status(500).json({
       message: "Internal server error",
       error: error.message,
-      stack: error.stack
+      suggestion: `Make sure Ollama is running and model '${OLLAMA_MODEL}' is pulled. Run: ollama pull ${OLLAMA_MODEL}`
     });
   }
 };

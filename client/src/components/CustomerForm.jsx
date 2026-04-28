@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { addCustomer } from "../api/customerApi.js";
 import CompanyTitle from "../components/CompanyTitle";
+import Breadcrumbs from "../components/Breadcrumbs";
 export default function AddCustomerForm() {
   const [formData, setFormData] = useState({
     name: "",
@@ -69,6 +70,7 @@ export default function AddCustomerForm() {
     <>
     <div className="flex flex-col px-2 sm:px-10 pt-10 sm:py-2 w-full ">
       <CompanyTitle />
+      <Breadcrumbs />
       <div className="flex flex-col  items-center w-full h-full mt-4 sm:mt-10">
         <div className="flex flex-col p-6  border rounded-md max-w-lg  shadow-md">
           <h2 className="text-xl font-bold mb-4">Add Customer</h2>

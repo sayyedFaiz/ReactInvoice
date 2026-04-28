@@ -61,13 +61,13 @@ function AllInvoiceTable() {
             <tr key={data._id}>
               <td className="text-center text-md p-1 ">{index + 1}</td>
               <td className="text-center text-md p-1 ">{data.invoiceNumber}</td>
-              <td className="text-center text-md p-1 ">
+              <td className="text-center text-md p-1 capitalize">
                 {data.customerDetails?.name}
               </td>
               <td className="text-center text-md p-1 ">
-                {data.items.reduce((sum, item) => sum + item.quantity, 0)}
+                {(data.items.reduce((sum, item) => sum + item.quantity, 0)).toLocaleString()}
               </td>
-              <td className="text-center text-md p-1 ">{data.grandTotal}</td>
+              <td className="text-center text-md p-1 ">{(data.grandTotal).toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</td>
               <td className=" text-center text-md p-1 gap-2 flex flex-col sm:flex-row justify-center items-center">
                 <Link
                   to={`/${data._id}`}

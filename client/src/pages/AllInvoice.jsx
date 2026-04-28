@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import AllInvoiceTable from "../components/AllInvoiceTable";
 import CompanyTitle from "../components/CompanyTitle";
-
+import Breadcrumbs from "../components/Breadcrumbs";
 const AllInvoice = () => {
   return (
     <>
-      <div className="w-full h-full flex flex-col px-4 py-2  sm:px-10 ">
+      <div className="w-full h-full flex flex-col px-4 py-2  sm:px-10 overflow-auto">
         <CompanyTitle/>
+        <Breadcrumbs />
         <div className="flex flex-col gap-3 sm:flex-row sm:gap-0 items-center  mt-6 sm:mt-10">
           <Link to="/create-invoice">
             <button className="btn font-bold capitalize border rounded-md px-4 py-2 hover:bg-black hover:text-white mr-0 sm:mr-4 w-full sm:w-auto">
@@ -19,7 +20,7 @@ const AllInvoice = () => {
             </button>
           </Link>
         </div>
-        <div className="w-full my-6 overflow-x-auto">
+        <div className="w-full my-6  ">
           <AllInvoiceTable />
         </div>
       </div>

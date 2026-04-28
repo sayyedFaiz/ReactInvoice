@@ -35,7 +35,7 @@ export default function MyDocument({ invoice }) {
               >
                 <View style={styles.customerDetails}>
                   <Text style={{ fontSize: 18, marginBottom: 2 }}>To</Text>
-                  <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+                  <Text style={{ fontWeight: "bold", fontSize: 20, textTransform: "capitalize" }}>
                     {invoice.customerDetails.name}
                   </Text>
                   <Text style={{ marginVertical: 2, lineHeight: 0.8 }}>

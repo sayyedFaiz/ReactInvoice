@@ -3,6 +3,7 @@ import EditForm from "../components/EditForm";
 import FinalInvoice from "../components/FinalInvoice";
 import CompanyTitle from "../components/CompanyTitle";
 import { getNextInvoiceNumber } from "../api/invoiceApi.js";
+import Breadcrumbs from "../components/Breadcrumbs";
 const Invoice = () => {
   const [showInvoice, setShowInvoice] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState(null);
@@ -45,6 +46,7 @@ const Invoice = () => {
     <div className="w-full px-4 py-2  flex flex-col justify-between overflow-auto sm:px-10 ">
       <div className="flex flex-col ">
         <CompanyTitle />
+        <Breadcrumbs />
         {/* Switch Container */}
         <div className="print:hidden relative w-full max-w-md mx-auto flex flex-row rounded-xl shadow-md mt-4 mb-4">
           {/* Sliding background */}
